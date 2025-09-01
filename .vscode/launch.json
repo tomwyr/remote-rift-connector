@@ -1,0 +1,40 @@
+{
+  "configurations": [
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:RemoteRift}",
+      "name": "Debug RemoteRiftExec",
+      "program": "${workspaceFolder:RemoteRift}/.build/debug/RemoteRiftExec",
+      "preLaunchTask": "swift: Build Debug RemoteRiftExec"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:RemoteRift}",
+      "name": "Release RemoteRiftExec",
+      "program": "${workspaceFolder:RemoteRift}/.build/release/RemoteRiftExec",
+      "preLaunchTask": "swift: Build Release RemoteRiftExec"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:RemoteRift}",
+      "name": "Debug RemoteRift",
+      "program": "${workspaceFolder:RemoteRift}/.build/debug/RemoteRift",
+      "preLaunchTask": "swift: Build Debug RemoteRift"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:RemoteRift}",
+      "name": "Release RemoteRift",
+      "program": "${workspaceFolder:RemoteRift}/.build/release/RemoteRift",
+      "preLaunchTask": "swift: Build Release RemoteRift"
+    }
+  ]
+}
