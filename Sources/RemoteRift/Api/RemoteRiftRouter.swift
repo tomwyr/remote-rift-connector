@@ -12,8 +12,7 @@ extension Router where Context == BasicWebSocketRequestContext {
     let state = group("state")
 
     state.get("current") { req, res async throws in
-      let controller = RemoteRiftController()
-      let state = try await controller.getCurrentState()
+      let state = try await RemoteRift().getCurrentState()
       return JsonResponseGenerator(value: state)
     }
 
@@ -21,8 +20,7 @@ extension Router where Context == BasicWebSocketRequestContext {
       .upgrade()
     } onUpgrade: { inbound, outbound, sd in
       func streamCurrentState() async throws {
-        let controller = RemoteRiftController()
-        for await state in try controller.getCurrentSateStream() {
+        for await state in try RemoteRift().getCurrentSateStream() {
           let json = try state.jsonEncoded()
           try await outbound.write(.text(json))
         }
@@ -53,6 +51,27 @@ extension Router where Context == BasicWebSocketRequestContext {
       }
     }
 
+    let match = group("match")
+
+    match.post("search/start") { req, res async throws in
+      try await RemoteRift().startMatchSearch()
+      return HTTPResponse.Status.noContent
+    }
+
+    match.post("search/stop") { req, res async throws in
+      try await RemoteRift().stopMatchSearch()
+      return HTTPResponse.Status.noContent
+    }
+
     return self
+  }
+}
+
+extension RemoteRift {
+  init() throws {
+    let connection = LcuConnection()
+    let lockfileData = try connection.getLockfileData()
+    let lcuApi = LcuApiClient(httpClient: .noCertificateVerification(), lockfileData: lockfileData)
+    self.init(lcuApi: lcuApi)
   }
 }

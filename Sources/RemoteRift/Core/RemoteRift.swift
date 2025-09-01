@@ -62,4 +62,23 @@ struct RemoteRift {
       return .unknown
     }
   }
+
+  func startMatchSearch() async throws {
+    guard case .lobby(state: .idle) = await getCurrentState() else {
+      throw RemoteRiftError.notIdleState
+    }
+    try await lcuApi.startMatchmakingSearch()
+  }
+
+  func stopMatchSearch() async throws {
+    guard case .lobby(state: .searching) = await getCurrentState() else {
+      throw RemoteRiftError.notSearchingState
+    }
+    try await lcuApi.stopMatchmakingSearch()
+  }
+}
+
+enum RemoteRiftError: Error {
+  case notIdleState
+  case notSearchingState
 }
