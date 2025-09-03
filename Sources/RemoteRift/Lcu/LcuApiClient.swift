@@ -3,11 +3,11 @@ import Foundation
 struct LcuApiClient {
   init(httpClient: HttpClient, lockfileData: LcuLockfileData) {
     self.httpClient = httpClient
-    self.connectionInfo = lockfileData
+    self.lockfileData = lockfileData
   }
 
   private let httpClient: HttpClient
-  private let connectionInfo: LcuLockfileData
+  private let lockfileData: LcuLockfileData
 
   func getGameflowPhase() async throws -> GameflowPhase {
     let (data, _) = try await request(.get, "lol-gameflow/v1/gameflow-phase")
@@ -46,9 +46,9 @@ struct LcuApiClient {
 
   private func request(_ method: HttpMethod, _ path: String) async throws -> (Data, HTTPURLResponse)
   {
-    let baseUrl = "https://127.0.0.1:\(connectionInfo.port)"
+    let baseUrl = "https://127.0.0.1:\(lockfileData.port)"
 
-    let credentials = "riot:\(connectionInfo.password)"
+    let credentials = "riot:\(lockfileData.password)"
     let authorization = credentials.data(using: .utf8)!.base64EncodedString()
 
     return try await httpClient.request(
