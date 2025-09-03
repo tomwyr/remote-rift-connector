@@ -49,7 +49,7 @@ struct RemoteRift {
             .found(state: .pending)
           case .accepted:
             .found(state: .accepted)
-          case .rejected:
+          case .declined:
             .found(state: .declined)
           }
         }

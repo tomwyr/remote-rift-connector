@@ -39,7 +39,7 @@ enum ReadyCheckState: String, Codable {
 enum ReadyCheckResponse: String, Codable {
   case none = "None"
   case accepted = "Accepted"
-  case rejected = "Rejected"
+  case declined = "Declined"
 }
 
 struct ReadyCheckError: Error, Codable {
