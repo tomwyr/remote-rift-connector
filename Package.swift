@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "RemoteRift",
+    name: "RemoteRiftConnector",
     platforms: [.macOS(.v14)],
     products: [
         .executable(
-            name: "RemoteRift",
-            targets: ["RemoteRift"],
+            name: "RemoteRiftConnector",
+            targets: ["RemoteRiftConnector"],
         )
     ],
     dependencies: [
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "RemoteRift",
+            name: "RemoteRiftConnector",
             dependencies: [
                 .product(name: "Hummingbird", package: "hummingbird"),
                 .product(name: "HummingbirdWebSocket", package: "hummingbird-websocket"),
@@ -27,8 +27,8 @@ let package = Package(
             ],
         ),
         .testTarget(
-            name: "RemoteRiftTests",
-            dependencies: ["RemoteRift"],
+            name: "RemoteRiftConnectorTests",
+            dependencies: ["RemoteRiftConnector"],
         ),
     ],
 )

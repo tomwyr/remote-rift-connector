@@ -1,6 +1,6 @@
 import Foundation
 
-struct RemoteRift {
+struct RemoteRiftConnector {
   init(lcuApi: LcuApiClient) {
     self.lcuApi = lcuApi
   }

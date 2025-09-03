@@ -12,7 +12,7 @@ extension Router where Context == BasicWebSocketRequestContext {
     let state = group("state")
 
     state.get("current") { req, res async throws in
-      let state = try await RemoteRift().getCurrentState()
+      let state = try await RemoteRiftConnector().getCurrentState()
       return JsonResponseGenerator(value: state)
     }
 
@@ -20,7 +20,7 @@ extension Router where Context == BasicWebSocketRequestContext {
       .upgrade()
     } onUpgrade: { inbound, outbound, sd in
       func streamCurrentState() async throws {
-        for await state in try RemoteRift().getCurrentSateStream() {
+        for await state in try RemoteRiftConnector().getCurrentSateStream() {
           let json = try state.jsonEncoded()
           try await outbound.write(.text(json))
         }
@@ -54,22 +54,22 @@ extension Router where Context == BasicWebSocketRequestContext {
     let queue = group("queue")
 
     queue.post("start") { req, res async throws in
-      try await RemoteRift().searchMatch()
+      try await RemoteRiftConnector().searchMatch()
       return HTTPResponse.Status.noContent
     }
 
     queue.post("stop") { req, res async throws in
-      try await RemoteRift().stopMatchSearch()
+      try await RemoteRiftConnector().stopMatchSearch()
       return HTTPResponse.Status.noContent
     }
 
     queue.post("accept") { req, res async throws in
-      try await RemoteRift().acceptMatch()
+      try await RemoteRiftConnector().acceptMatch()
       return HTTPResponse.Status.noContent
     }
 
     queue.post("decline") { req, res async throws in
-      try await RemoteRift().declineMatch()
+      try await RemoteRiftConnector().declineMatch()
       return HTTPResponse.Status.noContent
     }
 
@@ -77,7 +77,7 @@ extension Router where Context == BasicWebSocketRequestContext {
   }
 }
 
-extension RemoteRift {
+extension RemoteRiftConnector {
   init() throws {
     let connection = LcuConnection()
     let lockfileData = try connection.getLockfileData()
