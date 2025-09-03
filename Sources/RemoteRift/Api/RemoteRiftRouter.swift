@@ -51,15 +51,25 @@ extension Router where Context == BasicWebSocketRequestContext {
       }
     }
 
-    let match = group("match")
+    let queue = group("queue")
 
-    match.post("search/start") { req, res async throws in
-      try await RemoteRift().startMatchSearch()
+    queue.post("start") { req, res async throws in
+      try await RemoteRift().searchMatch()
       return HTTPResponse.Status.noContent
     }
 
-    match.post("search/stop") { req, res async throws in
+    queue.post("stop") { req, res async throws in
       try await RemoteRift().stopMatchSearch()
+      return HTTPResponse.Status.noContent
+    }
+
+    queue.post("accept") { req, res async throws in
+      try await RemoteRift().acceptMatch()
+      return HTTPResponse.Status.noContent
+    }
+
+    queue.post("decline") { req, res async throws in
+      try await RemoteRift().declineMatch()
       return HTTPResponse.Status.noContent
     }
 
