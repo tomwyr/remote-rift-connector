@@ -9,6 +9,13 @@ extension Router where Context == BasicWebSocketRequestContext {
   }
 
   func configure() -> Self {
+    configureState()
+    configureLobby()
+    configureQueue()
+    return self
+  }
+
+  private func configureState() {
     let state = group("state")
 
     state.get("current") { req, res async throws in
@@ -50,7 +57,9 @@ extension Router where Context == BasicWebSocketRequestContext {
         }
       }
     }
+  }
 
+  private func configureLobby() {
     let lobby = group("lobby")
 
     lobby.post("create") { req, res async throws in
@@ -62,7 +71,9 @@ extension Router where Context == BasicWebSocketRequestContext {
       try await RemoteRiftConnector().leaveLobby()
       return HTTPResponse.Status.noContent
     }
+  }
 
+  private func configureQueue() {
     let queue = group("queue")
 
     queue.post("start") { req, res async throws in
@@ -84,8 +95,6 @@ extension Router where Context == BasicWebSocketRequestContext {
       try await RemoteRiftConnector().declineMatch()
       return HTTPResponse.Status.noContent
     }
-
-    return self
   }
 }
 
