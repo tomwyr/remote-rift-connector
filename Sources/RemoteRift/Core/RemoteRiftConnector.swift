@@ -63,6 +63,20 @@ struct RemoteRiftConnector {
     }
   }
 
+  func createLobby() async throws {
+    guard case .preGame = await getCurrentState() else {
+      throw RemoteRiftError.notPreGame
+    }
+    try await lcuApi.createLobby()
+  }
+
+  func leaveLobby() async throws {
+    guard case .lobby(state: .idle) = await getCurrentState() else {
+      throw RemoteRiftError.notIdleState
+    }
+    try await lcuApi.deleteLobby()
+  }
+
   func searchMatch() async throws {
     guard case .lobby(state: .idle) = await getCurrentState() else {
       throw RemoteRiftError.notIdleState
@@ -93,6 +107,7 @@ struct RemoteRiftConnector {
 }
 
 enum RemoteRiftError: Error {
+  case notPreGame
   case notIdleState
   case notSearchingState
   case notPendingState

@@ -13,7 +13,7 @@ struct HttpClient {
     url: String,
     method: HttpMethod = .get,
     headers: [String: String] = [:],
-    body: [String: String]? = nil
+    body: [String: Any]? = nil
   ) async throws -> (Data, HTTPURLResponse) {
     let urlString = if let baseUrl { baseUrl + url } else { url }
     guard let requestUrl = URL(string: urlString) else {
@@ -25,8 +25,8 @@ struct HttpClient {
     headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
 
     if let body {
-      let bodyString = body.map { "\($0)=\($1)" }.joined(separator: "&")
-      request.httpBody = bodyString.data(using: .utf8)
+      let bodyData = try JSONSerialization.data(withJSONObject: body)
+      request.httpBody = bodyData
     }
 
     let (data, response) = try await session.data(for: request)

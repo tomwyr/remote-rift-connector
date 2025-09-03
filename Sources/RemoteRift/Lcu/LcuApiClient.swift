@@ -9,9 +9,22 @@ struct LcuApiClient {
   private let httpClient: HttpClient
   private let lockfileData: LcuLockfileData
 
+  private let rankedSoloQueueId = 420
+
   func getGameflowPhase() async throws -> GameflowPhase {
     let (data, _) = try await request(.get, "lol-gameflow/v1/gameflow-phase")
     return try data.jsonDecoded()
+  }
+
+  func createLobby() async throws {
+    let (_, _) = try await request(
+      .post, "lol-lobby/v2/lobby",
+      ["queueId": rankedSoloQueueId],
+    )
+  }
+
+  func deleteLobby() async throws {
+    let (_, _) = try await request(.delete, "lol-lobby/v2/lobby")
   }
 
   func getMatchmakingSearch() async throws -> MatchmakingSearch {
@@ -44,8 +57,10 @@ struct LcuApiClient {
     let (_, _) = try await request(.post, "lol-matchmaking/v1/ready-check/decline")
   }
 
-  private func request(_ method: HttpMethod, _ path: String) async throws -> (Data, HTTPURLResponse)
-  {
+  private func request(
+    _ method: HttpMethod, _ path: String,
+    _ body: [String: Any]? = nil,
+  ) async throws -> (Data, HTTPURLResponse) {
     let baseUrl = "https://127.0.0.1:\(lockfileData.port)"
 
     let credentials = "riot:\(lockfileData.password)"
@@ -54,7 +69,11 @@ struct LcuApiClient {
     return try await httpClient.request(
       url: "\(baseUrl)/\(path)",
       method: method,
-      headers: ["Authorization": "Basic \(authorization)"],
+      headers: [
+        "Authorization": "Basic \(authorization)",
+        "Content-Type": "application/json",
+      ],
+      body: body,
     )
   }
 }

@@ -51,6 +51,18 @@ extension Router where Context == BasicWebSocketRequestContext {
       }
     }
 
+    let lobby = group("lobby")
+
+    lobby.post("create") { req, res async throws in
+      try await RemoteRiftConnector().createLobby()
+      return HTTPResponse.Status.noContent
+    }
+
+    lobby.post("leave") { req, res async throws in
+      try await RemoteRiftConnector().leaveLobby()
+      return HTTPResponse.Status.noContent
+    }
+
     let queue = group("queue")
 
     queue.post("start") { req, res async throws in
