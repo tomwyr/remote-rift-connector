@@ -1,17 +1,17 @@
+import ArgumentParser
 import Foundation
 import Hummingbird
 import HummingbirdWebSocket
 import Logging
 
-@main
 struct RemoteRiftApi {
-  static func main() async throws {
+  func runService(host: String, port: Int) async throws {
     let router = Router.webSocketSupported().configure()
 
     let app = Application(
       router: router,
       server: .http1WebSocketUpgrade(webSocketRouter: router),
-      configuration: .init(address: .hostname("192.168.50.252", port: 8080))
+      configuration: .init(address: .hostname(host, port: port))
     )
 
     try await app.runService()

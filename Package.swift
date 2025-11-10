@@ -11,6 +11,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.15.0"),
         .package(
             url: "https://github.com/hummingbird-project/hummingbird-websocket.git", from: "2.6.0",
@@ -21,6 +22,7 @@ let package = Package(
         .executableTarget(
             name: "RemoteRiftConnector",
             dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Hummingbird", package: "hummingbird"),
                 .product(name: "HummingbirdWebSocket", package: "hummingbird-websocket"),
                 .product(name: "UnionCodable", package: "union-codable"),
