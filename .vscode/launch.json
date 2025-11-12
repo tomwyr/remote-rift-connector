@@ -5,18 +5,9 @@
       "request": "launch",
       "args": [],
       "cwd": "${workspaceFolder:remote-rift-connector}",
-      "name": "Debug RemoteRiftConnector (remote-rift-connector)",
+      "name": "remote-rift-connector",
       "program": "${workspaceFolder:remote-rift-connector}/.build/debug/RemoteRiftConnector",
       "preLaunchTask": "swift: Build Debug RemoteRiftConnector (remote-rift-connector)"
     },
-    {
-      "type": "swift",
-      "request": "launch",
-      "args": [],
-      "cwd": "${workspaceFolder:remote-rift-connector}",
-      "name": "Release RemoteRiftConnector (remote-rift-connector)",
-      "program": "${workspaceFolder:remote-rift-connector}/.build/release/RemoteRiftConnector",
-      "preLaunchTask": "swift: Build Release RemoteRiftConnector (remote-rift-connector)"
-    }
   ]
 }
