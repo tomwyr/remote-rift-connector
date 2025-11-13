@@ -3,11 +3,29 @@
     {
       "type": "swift",
       "request": "launch",
-      "args": [],
+      "args": [
+        "--host",
+        "${input:host}",
+        "--port",
+        "${input:port}",
+      ],
       "cwd": "${workspaceFolder:remote-rift-connector}",
       "name": "remote-rift-connector",
       "program": "${workspaceFolder:remote-rift-connector}/.build/debug/RemoteRiftConnector",
       "preLaunchTask": "swift: Build Debug RemoteRiftConnector (remote-rift-connector)"
     },
+  ],
+  "inputs": [
+    {
+      "id": "host",
+      "type": "promptString",
+      "description": "Connector API host address",
+    },
+    {
+      "id": "port",
+      "type": "promptString",
+      "description": "Connector API port number",
+      "default": "8080",
+    }
   ]
 }
