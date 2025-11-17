@@ -1,13 +1,13 @@
 import Foundation
 
 struct LcuApiClient {
-  init(httpClient: HttpClient, lockfileData: LcuLockfileData) {
+  init(httpClient: HttpClient, lcuConnection: LcuConnection) {
     self.httpClient = httpClient
-    self.lockfileData = lockfileData
+    self.lcuConnection = lcuConnection
   }
 
   private let httpClient: HttpClient
-  private let lockfileData: LcuLockfileData
+  private let lcuConnection: LcuConnection
 
   private let rankedSoloQueueId = 420
 
@@ -61,6 +61,29 @@ struct LcuApiClient {
     _ method: HttpMethod, _ path: String,
     _ body: [String: Any]? = nil,
   ) async throws -> (Data, HTTPURLResponse) {
+    let execute = {
+      let lockfileData = try await lcuConnection.getLockfileData()
+      return try await requestHttp(method, path, body, lockfileData)
+    }
+
+    do {
+      do {
+        return try await execute()
+      } catch  where error.isLockfileError {
+        // Retry once in case the error was caused by stale lockfile
+        _ = try await lcuConnection.refreshLockfileData()
+        return try await execute()
+      }
+    } catch  where error.isConnectionError {
+      throw LcuApiClientError.unableToConnect
+    }
+  }
+
+  private func requestHttp(
+    _ method: HttpMethod, _ path: String,
+    _ body: [String: Any]? = nil,
+    _ lockfileData: LcuLockfileData,
+  ) async throws -> (Data, HTTPURLResponse) {
     let baseUrl = "https://127.0.0.1:\(lockfileData.port)"
 
     let credentials = "riot:\(lockfileData.password)"
@@ -75,5 +98,26 @@ struct LcuApiClient {
       ],
       body: body,
     )
+  }
+}
+
+enum LcuApiClientError: Error {
+  case unableToConnect
+}
+
+extension Error {
+  fileprivate var isLockfileError: Bool {
+    self is URLError
+  }
+
+  fileprivate var isConnectionError: Bool {
+    switch self {
+    case let error as LcuApiClientError where error == LcuApiClientError.unableToConnect:
+      true
+    case is URLError:
+      true
+    default:
+      false
+    }
   }
 }

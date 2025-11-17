@@ -1,6 +1,6 @@
 import Foundation
 
-struct LcuConnection {
+actor LcuConnection {
   init(
     parser: LockfileParser = LcuLockfileParser(),
     loader: LockfileLoader = LcuLockfileLoader(),
@@ -12,8 +12,19 @@ struct LcuConnection {
   private let parser: LockfileParser
   private let loader: LockfileLoader
 
+  private var lockfileData: LcuLockfileData?
+
   func getLockfileData() throws -> LcuLockfileData {
-    try parser.parseLockfile(from: try loader.loadLockfile())
+    if let lockfileData {
+      return lockfileData
+    }
+    return try refreshLockfileData()
+  }
+
+  func refreshLockfileData() throws -> LcuLockfileData {
+    let data = try parser.parseLockfile(from: try loader.loadLockfile())
+    lockfileData = data
+    return data
   }
 }
 
