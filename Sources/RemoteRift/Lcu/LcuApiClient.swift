@@ -67,15 +67,11 @@ struct LcuApiClient {
     }
 
     do {
-      do {
-        return try await execute()
-      } catch  where error.isLockfileError {
-        // Retry once in case the error was caused by stale lockfile
-        _ = try await lcuConnection.refreshLockfileData()
-        return try await execute()
-      }
-    } catch  where error.isConnectionError {
-      throw LcuApiClientError.unableToConnect
+      return try await execute()
+    } catch  where error.isLockfileError {
+      // Retry once in case the error was caused by stale lockfile
+      _ = try await lcuConnection.refreshLockfileData()
+      return try await execute()
     }
   }
 
@@ -99,10 +95,6 @@ struct LcuApiClient {
       body: body,
     )
   }
-}
-
-enum LcuApiClientError: Error {
-  case unableToConnect
 }
 
 extension Error {
