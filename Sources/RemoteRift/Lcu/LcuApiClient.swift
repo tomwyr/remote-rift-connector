@@ -106,15 +106,13 @@ enum LcuApiClientError: Error {
 }
 
 extension Error {
-  fileprivate var isLockfileError: Bool {
+  var isLockfileError: Bool {
     self is URLError
   }
 
-  fileprivate var isConnectionError: Bool {
+  var isConnectionError: Bool {
     switch self {
-    case let error as LcuApiClientError where error == LcuApiClientError.unableToConnect:
-      true
-    case is URLError:
+    case is URLError, is LcuConnectionError:
       true
     default:
       false

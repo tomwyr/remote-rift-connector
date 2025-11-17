@@ -19,7 +19,7 @@ extension Router where Context == BasicWebSocketRequestContext {
     let state = group("state")
 
     state.get("current") { req, res async throws in
-      let state = await RemoteRiftConnector().getCurrentState()
+      let state = try await RemoteRiftConnector().getCurrentState()
       return JsonResponseGenerator(value: state)
     }
 

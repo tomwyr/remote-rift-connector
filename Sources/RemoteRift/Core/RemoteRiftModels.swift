@@ -2,6 +2,17 @@ import Hummingbird
 import UnionCodable
 
 @UnionCodable
+enum RemoteRiftStateResponse: Codable {
+  case data(RemoteRiftState)
+  case error(RemoteRiftStateError)
+}
+
+enum RemoteRiftStateError: Error, Codable {
+  case unableToConnect
+  case unknown
+}
+
+@UnionCodable
 enum RemoteRiftState: Equatable, Codable {
   case unknown
   case preGame
