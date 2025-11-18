@@ -1,35 +1,35 @@
 import Foundation
 import Testing
 
-@testable import RemoteRift
+@testable import RemoteRiftConnector
 
-@Test func parseValidLockfile() throws {
+@Test func parseValidLockfile() async throws {
   let connection = setUpConnection(
     lockfile: "LeagueClient:4739:64831:92vPaOjpGk5JdXIbMVHAgA:https",
   )
-  let data = try connection.getLockfileData()
+  let data = try await connection.getLockfileData()
   let expected = LcuLockfileData(port: 64831, password: "92vPaOjpGk5JdXIbMVHAgA")
   #expect(data == expected)
 }
 
-@Test func parseLockfileWithInvalidPort() throws {
+@Test func parseLockfileWithInvalidPort() async throws {
   let connection = setUpConnection(
     lockfile: "LeagueClient:4739:64abc:92vPaOjpGk5JdXIbMVHAgA:https",
   )
-  #expect {
-    try connection.getLockfileData()
+  await #expect {
+    try await connection.getLockfileData()
   } throws: { err in
     guard let err = err as? LcuConnectionError else { return false }
     return err == .lockfileInvalid
   }
 }
 
-@Test func parseLockfileWithMissingSegment() throws {
+@Test func parseLockfileWithMissingSegment() async throws {
   let connection = setUpConnection(
     lockfile: "4739:64831:92vPaOjpGk5JdXIbMVHAgA:https",
   )
-  #expect {
-    try connection.getLockfileData()
+  await #expect {
+    try await connection.getLockfileData()
   } throws: { err in
     guard let err = err as? LcuConnectionError else { return false }
     return err == .lockfileInvalid
