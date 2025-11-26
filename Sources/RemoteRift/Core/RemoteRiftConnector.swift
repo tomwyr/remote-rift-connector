@@ -7,6 +7,15 @@ struct RemoteRiftConnector {
 
   private let lcuApi: LcuApiClient
 
+  func getStatus() async throws -> RemoteRiftStatus {
+    do {
+      let connection = try await lcuApi.getHeartbeatConnection()
+      return connection.stableConnection ? .ready : .unavailable
+    } catch {
+      return .unavailable
+    }
+  }
+
   func getCurrentSateStream() -> AsyncStream<RemoteRiftStateResponse> {
     AsyncStream(every: .seconds(1)) {
       do {

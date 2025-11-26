@@ -9,10 +9,19 @@ extension Router where Context == BasicWebSocketRequestContext {
   }
 
   func configure() -> Self {
+    configureStatus()
     configureState()
     configureLobby()
     configureQueue()
     return self
+  }
+
+  private func configureStatus() {
+    let status = group("status")
+
+    status.get { req, res async throws in
+      try await RemoteRiftConnector().getStatus()
+    }
   }
 
   private func configureState() {

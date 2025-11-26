@@ -1,6 +1,10 @@
 import Hummingbird
 import UnionCodable
 
+enum RemoteRiftStatus: String, ResponseCodable {
+  case ready, unavailable
+}
+
 @UnionCodable
 enum RemoteRiftStateResponse: Equatable, ResponseCodable {
   case data(RemoteRiftState)

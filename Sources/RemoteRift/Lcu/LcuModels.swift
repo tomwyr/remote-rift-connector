@@ -46,3 +46,7 @@ struct ReadyCheckError: Error, Codable {
   let httpStatus: Int
   let message: String
 }
+
+struct HeartbeatConnection: Codable {
+  let stableConnection: Bool
+}

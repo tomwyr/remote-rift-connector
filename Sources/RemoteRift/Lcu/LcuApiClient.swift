@@ -11,6 +11,11 @@ struct LcuApiClient {
 
   private let rankedSoloQueueId = 420
 
+  func getHeartbeatConnection() async throws -> HeartbeatConnection {
+    let (data, _) = try await request(.post, "lol-heartbeat/v1/connection-status")
+    return try data.jsonDecoded()
+  }
+
   func getGameflowPhase() async throws -> GameflowPhase {
     let (data, _) = try await request(.get, "lol-gameflow/v1/gameflow-phase")
     return try data.jsonDecoded()
