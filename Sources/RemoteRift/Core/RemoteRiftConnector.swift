@@ -7,24 +7,19 @@ struct RemoteRiftConnector {
 
   private let lcuApi: LcuApiClient
 
-  func getStatus() async throws -> RemoteRiftStatus {
-    do {
-      let connection = try await lcuApi.getHeartbeatConnection()
-      return connection.stableConnection ? .ready : .unavailable
-    } catch {
-      return .unavailable
+  func getStatusStream() -> AsyncStream<RemoteRiftResponse<RemoteRiftStatus>> {
+    AsyncStream(every: .seconds(1)) {
+      await _runCatching {
+        let connection = try await lcuApi.getHeartbeatConnection()
+        return connection.stableConnection ? .ready : .unavailable as RemoteRiftStatus
+      }
     }
   }
 
-  func getCurrentSateStream() -> AsyncStream<RemoteRiftStateResponse> {
+  func getCurrentSateStream() -> AsyncStream<RemoteRiftResponse<RemoteRiftState>> {
     AsyncStream(every: .seconds(1)) {
-      do {
-        let state = try await self.getCurrentState()
-        return .data(state)
-      } catch  where error.isConnectionError {
-        return .error(.unableToConnect)
-      } catch {
-        return .error(.unknown)
+      await _runCatching {
+        try await self.getCurrentState()
       }
     }
   }
@@ -115,6 +110,18 @@ struct RemoteRiftConnector {
     }
     try await lcuApi.declineReadyCheck()
   }
+
+  func _runCatching<T>(resolve: () async throws -> T) async -> RemoteRiftResponse<T>
+  where T: ResponseCodable {
+    do {
+      return .data(try await resolve())
+    } catch  where error.isConnectionError {
+      return .error(.unableToConnect)
+    } catch {
+      return .error(.unknown)
+    }
+  }
+
 }
 
 enum RemoteRiftError: Error {

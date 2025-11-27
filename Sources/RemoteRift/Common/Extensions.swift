@@ -1,4 +1,6 @@
 import Foundation
+import Hummingbird
+import HummingbirdWebSocket
 
 extension AsyncStream {
   init(
@@ -13,7 +15,6 @@ extension AsyncStream {
         }
       }
       continuation.onTermination = { term in
-        print(term)
         task.cancel()
       }
     }
@@ -31,5 +32,40 @@ extension Encodable {
       throw EncodingError.invalidValue(self, context)
     }
     return jsonString
+  }
+}
+
+extension RouterGroup<BasicWebSocketRequestContext> {
+  @discardableResult func wsOutSafe(
+    _ path: RouterPath = "",
+    resolve: @escaping @Sendable (WebSocketOutboundWriter) async throws -> Void
+  ) -> RouterGroup<BasicWebSocketRequestContext> {
+    ws(path) { _, _ in
+      .upgrade()
+    } onUpgrade: { inbound, outbound, sd in
+      func processInput() async throws {
+        for try await _ in inbound {
+          // Read inbound data to keep the ping-pong connection alive.
+        }
+      }
+
+      await withTaskGroup { group in
+        group.addTask {
+          do {
+            try await resolve(outbound)
+          } catch {
+            print("Outbound error:", error)
+          }
+        }
+
+        group.addTask {
+          do {
+            try await processInput()
+          } catch {
+            print("Inbound error:", error)
+          }
+        }
+      }
+    }
   }
 }

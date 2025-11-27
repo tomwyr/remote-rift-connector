@@ -4,8 +4,8 @@ import Testing
 @testable import RemoteRiftConnector
 
 @Test func stateResponseSerialization() async throws {
-  func testResponse(json: String, value: RemoteRiftStateResponse) throws {
-    let decodedValue = try jsonToObject(RemoteRiftStateResponse.self, json)
+  func testResponse(json: String, value: RemoteRiftResponse<RemoteRiftState>) throws {
+    let decodedValue = try jsonToObject(RemoteRiftResponse<RemoteRiftState>.self, json)
     #expect(decodedValue == value)
 
     let jsonDict = try jsonToDict(json)

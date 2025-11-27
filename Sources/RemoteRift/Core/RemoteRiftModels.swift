@@ -6,8 +6,8 @@ enum RemoteRiftStatus: String, ResponseCodable {
 }
 
 @UnionCodable
-enum RemoteRiftStateResponse: Equatable, ResponseCodable {
-  case data(RemoteRiftState)
+enum RemoteRiftResponse<T>: Equatable & ResponseCodable where T: Equatable & ResponseCodable {
+  case data(T)
   case error(RemoteRiftStateError)
 }
 
