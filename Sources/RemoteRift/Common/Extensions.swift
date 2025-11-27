@@ -7,12 +7,44 @@ extension AsyncStream {
     every interval: Duration,
     _ computation: @escaping @Sendable () async -> Element,
   ) {
+    // Cast to reuse the initializer that expects a nullable-producing function.
+    // Since this computation never returns nil, no elements will be skipped.
+    let computationAsNullable: @Sendable () async -> Element? = computation
+    self.init(every: interval, computationAsNullable)
+  }
+
+  init(
+    every interval: Duration,
+    _ computation: @escaping @Sendable () async -> Element?,
+  ) {
     self.init { continuation in
       let task = Task {
         while !Task.isCancelled {
           try? await Task.sleep(for: interval)
-          continuation.yield(await computation())
+          if let value = await computation() {
+            continuation.yield(value)
+          }
         }
+      }
+      continuation.onTermination = { term in
+        task.cancel()
+      }
+    }
+  }
+}
+
+extension AsyncStream where Element: Equatable & Sendable {
+  func removingDuplicates() -> AsyncStream<Element> {
+    .init { continuation in
+      var last: Element?
+      let task = Task {
+        for await value in self {
+          if last != value {
+            last = value
+            continuation.yield(value)
+          }
+        }
+        continuation.finish()
       }
       continuation.onTermination = { term in
         task.cancel()

@@ -16,12 +16,10 @@ struct RemoteRiftConnector {
     }
   }
 
-  func getCurrentSateStream() -> AsyncStream<RemoteRiftResponse<RemoteRiftState>> {
+  func getCurrentSateStream() -> AsyncStream<RemoteRiftState> {
     AsyncStream(every: .seconds(1)) {
-      await _runCatching {
-        try await self.getCurrentState()
-      }
-    }
+      try? await self.getCurrentState()
+    }.removingDuplicates()
   }
 
   func getCurrentState() async throws -> RemoteRiftState {
