@@ -68,7 +68,7 @@ extension Encodable {
 }
 
 extension RouterGroup<BasicWebSocketRequestContext> {
-  @discardableResult func wsOutSafe(
+  @discardableResult func wsOutDefault(
     _ path: RouterPath = "",
     resolve: @escaping @Sendable (WebSocketOutboundWriter) async throws -> Void
   ) -> RouterGroup<BasicWebSocketRequestContext> {

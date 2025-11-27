@@ -11,7 +11,7 @@ struct RemoteRiftConnector {
     AsyncStream(every: .seconds(1)) {
       await _runCatching {
         let connection = try await lcuApi.getHeartbeatConnection()
-        return connection.stableConnection ? .ready : .unavailable as RemoteRiftStatus
+        return connection.stableConnection ? .ready : .unavailable
       }
     }
   }

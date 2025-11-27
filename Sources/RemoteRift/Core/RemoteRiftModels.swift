@@ -1,14 +1,9 @@
 import Hummingbird
 import UnionCodable
 
+@UnionCodable(discriminator: "value")
 enum RemoteRiftStatus: String, ResponseCodable {
   case ready, unavailable
-}
-
-@UnionCodable
-enum RemoteRiftResponse<T>: Equatable & ResponseCodable where T: Equatable & ResponseCodable {
-  case data(T)
-  case error(RemoteRiftStateError)
 }
 
 @UnionCodable(discriminator: "value")
@@ -29,6 +24,12 @@ enum GameFoundState: String, ResponseCodable {
   case pending
   case accepted
   case declined
+}
+
+@UnionCodable
+enum RemoteRiftResponse<T>: Equatable & ResponseCodable where T: Equatable & ResponseCodable {
+  case data(T)
+  case error(RemoteRiftStateError)
 }
 
 @UnionCodable(discriminator: "value")

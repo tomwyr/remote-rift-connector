@@ -19,9 +19,9 @@ extension Router where Context == BasicWebSocketRequestContext {
   private func configureStatus() {
     let status = group("status")
 
-    status.wsOutSafe("watch") { outbound in
-      for await state in RemoteRiftConnector().getStatusStream() {
-        let json = try state.jsonEncoded()
+    status.wsOutDefault("watch") { outbound in
+      for await status in RemoteRiftConnector().getStatusStream() {
+        let json = try status.jsonEncoded()
         try await outbound.write(.text(json))
       }
     }
@@ -34,7 +34,7 @@ extension Router where Context == BasicWebSocketRequestContext {
       try await RemoteRiftConnector().getCurrentState()
     }
 
-    state.wsOutSafe("watch") { outbound in
+    state.wsOutDefault("watch") { outbound in
       for await state in RemoteRiftConnector().getCurrentSateStream() {
         let json = try state.jsonEncoded()
         try await outbound.write(.text(json))
