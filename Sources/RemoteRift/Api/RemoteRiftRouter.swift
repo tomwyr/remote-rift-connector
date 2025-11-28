@@ -35,7 +35,7 @@ extension Router where Context == BasicWebSocketRequestContext {
     }
 
     state.wsOutDefault("watch") { outbound in
-      for await state in RemoteRiftConnector().getCurrentSateStream() {
+      for try await state in RemoteRiftConnector().getCurrentSateStream() {
         let json = try state.jsonEncoded()
         try await outbound.write(.text(json))
       }

@@ -36,8 +36,8 @@ extension AsyncStream {
 extension AsyncStream where Element: Equatable & Sendable {
   func removingDuplicates() -> AsyncStream<Element> {
     .init { continuation in
-      var last: Element?
       let task = Task {
+        var last: Element?
         for await value in self {
           if last != value {
             last = value
@@ -45,6 +45,55 @@ extension AsyncStream where Element: Equatable & Sendable {
           }
         }
         continuation.finish()
+      }
+      continuation.onTermination = { term in
+        task.cancel()
+      }
+    }
+  }
+}
+
+extension AsyncThrowingStream where Failure == Error {
+  init(
+    every interval: Duration,
+    _ computation: @escaping @Sendable () async throws -> Element,
+  ) {
+    self.init { continuation in
+      let task = Task {
+        while !Task.isCancelled {
+          try? await Task.sleep(for: interval)
+          do {
+            let value = try await computation()
+            continuation.yield(value)
+          } catch {
+            continuation.finish(throwing: error)
+            break
+          }
+        }
+      }
+      continuation.onTermination = { term in
+        task.cancel()
+      }
+    }
+  }
+}
+
+extension AsyncThrowingStream where Element: Equatable & Sendable, Failure == Error {
+  func removingDuplicates() -> AsyncThrowingStream<Element, Failure> {
+    .init { continuation in
+      let task = Task {
+        do {
+          var last: Element?
+          for try await value in self {
+            if last != value {
+              last = value
+              continuation.yield(value)
+            }
+          }
+          continuation.finish()
+        } catch {
+          continuation.finish(throwing: error)
+        }
       }
       continuation.onTermination = { term in
         task.cancel()
@@ -86,7 +135,11 @@ extension RouterGroup<BasicWebSocketRequestContext> {
           do {
             try await resolve(outbound)
           } catch {
-            print("Outbound error:", error)
+            print("Outbound error: \(error)")
+            try? await outbound.close(
+              .unexpectedServerError,
+              reason: "Unexpected error while processing output data.",
+            )
           }
         }
 
@@ -94,7 +147,11 @@ extension RouterGroup<BasicWebSocketRequestContext> {
           do {
             try await processInput()
           } catch {
-            print("Inbound error:", error)
+            print("Inbound error: \(error)")
+            try? await outbound.close(
+              .unexpectedServerError,
+              reason: "Unexpected error while processing input data.",
+            )
           }
         }
       }
