@@ -1,6 +1,7 @@
 import Foundation
 import Hummingbird
 import HummingbirdWebSocket
+import ServiceLifecycle
 
 extension AsyncStream {
   init(
@@ -19,11 +20,15 @@ extension AsyncStream {
   ) {
     self.init { continuation in
       let task = Task {
-        while !Task.isCancelled {
-          try? await Task.sleep(for: interval)
-          if let value = await computation() {
-            continuation.yield(value)
+        await withGracefulShutdownHandler {
+          while !Task.isCancelled {
+            try? await Task.sleep(for: interval)
+            if let value = await computation() {
+              continuation.yield(value)
+            }
           }
+        } onGracefulShutdown: {
+          continuation.finish()
         }
       }
       continuation.onTermination = { term in
@@ -34,7 +39,7 @@ extension AsyncStream {
 }
 
 extension AsyncStream where Element: Equatable & Sendable {
-  func removingDuplicates() -> AsyncStream<Element> {
+  func removeDuplicates() -> AsyncStream<Element> {
     .init { continuation in
       let task = Task {
         var last: Element?
@@ -60,15 +65,19 @@ extension AsyncThrowingStream where Failure == Error {
   ) {
     self.init { continuation in
       let task = Task {
-        while !Task.isCancelled {
-          try? await Task.sleep(for: interval)
-          do {
-            let value = try await computation()
-            continuation.yield(value)
-          } catch {
-            continuation.finish(throwing: error)
-            break
+        await withGracefulShutdownHandler {
+          while !Task.isCancelled {
+            try? await Task.sleep(for: interval)
+            do {
+              let value = try await computation()
+              continuation.yield(value)
+            } catch {
+              continuation.finish(throwing: error)
+              break
+            }
           }
+        } onGracefulShutdown: {
+          continuation.finish()
         }
       }
       continuation.onTermination = { term in
@@ -79,7 +88,7 @@ extension AsyncThrowingStream where Failure == Error {
 }
 
 extension AsyncThrowingStream where Element: Equatable & Sendable, Failure == Error {
-  func removingDuplicates() -> AsyncThrowingStream<Element, Failure> {
+  func removeDuplicates() -> AsyncThrowingStream<Element, Failure> {
     .init { continuation in
       let task = Task {
         do {
@@ -124,37 +133,39 @@ extension RouterGroup<BasicWebSocketRequestContext> {
     ws(path) { _, _ in
       .upgrade()
     } onUpgrade: { inbound, outbound, sd in
-      func processInput() async throws {
-        for try await _ in inbound {
-          // Read inbound data to keep the ping-pong connection alive.
-        }
-      }
-
-      await withTaskGroup { group in
+      await withThrowingTaskGroup { group in
         group.addTask {
           do {
             try await resolve(outbound)
           } catch {
             print("Outbound error: \(error)")
-            try? await outbound.close(
-              .unexpectedServerError,
-              reason: "Unexpected error while processing output data.",
-            )
+            throw WebSocketError(reason: "Unexpected error while processing output data")
           }
         }
 
         group.addTask {
           do {
-            try await processInput()
+            for try await _ in inbound {
+              // Read inbound data to keep the ping-pong connection alive.
+            }
           } catch {
             print("Inbound error: \(error)")
-            try? await outbound.close(
-              .unexpectedServerError,
-              reason: "Unexpected error while processing input data.",
-            )
+            throw WebSocketError(reason: "Unexpected error while processing input data")
           }
+        }
+
+        do {
+          try await group.waitForAll()
+        } catch {
+          group.cancelAll()
+          let reason = (error as? WebSocketError)?.reason ?? "Unexpected error"
+          try? await outbound.close(.unexpectedServerError, reason: reason)
         }
       }
     }
+  }
+
+  private struct WebSocketError: Error {
+    let reason: String
   }
 }

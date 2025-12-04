@@ -17,6 +17,7 @@ let package = Package(
             url: "https://github.com/hummingbird-project/hummingbird-websocket.git", from: "2.6.0",
         ),
         .package(url: "https://github.com/tomwyr/union-codable.git", from: "1.0.0"),
+        .package(url: "https://github.com/swift-server/swift-service-lifecycle.git", from: "2.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -26,6 +27,7 @@ let package = Package(
                 .product(name: "Hummingbird", package: "hummingbird"),
                 .product(name: "HummingbirdWebSocket", package: "hummingbird-websocket"),
                 .product(name: "UnionCodable", package: "union-codable"),
+                .product(name: "ServiceLifecycle", package: "swift-service-lifecycle"),
             ],
         ),
         .testTarget(
