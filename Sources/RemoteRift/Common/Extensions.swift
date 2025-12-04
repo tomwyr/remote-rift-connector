@@ -8,24 +8,12 @@ extension AsyncStream {
     every interval: Duration,
     _ computation: @escaping @Sendable () async -> Element,
   ) {
-    // Cast to reuse the initializer that expects a nullable-producing function.
-    // Since this computation never returns nil, no elements will be skipped.
-    let computationAsNullable: @Sendable () async -> Element? = computation
-    self.init(every: interval, computationAsNullable)
-  }
-
-  init(
-    every interval: Duration,
-    _ computation: @escaping @Sendable () async -> Element?,
-  ) {
     self.init { continuation in
       let task = Task {
         await withGracefulShutdownHandler {
           while !Task.isCancelled {
             try? await Task.sleep(for: interval)
-            if let value = await computation() {
-              continuation.yield(value)
-            }
+            continuation.yield(await computation())
           }
         } onGracefulShutdown: {
           continuation.finish()
