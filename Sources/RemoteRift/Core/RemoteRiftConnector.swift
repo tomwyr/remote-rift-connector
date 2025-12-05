@@ -62,7 +62,7 @@ struct RemoteRiftConnector {
         }
       }
 
-    case .champSelect, .inProgress, .preEndOfGame, .endOfGame:
+    case .champSelect, .inProgress, .waitingForStats, .preEndOfGame, .endOfGame:
       return .inGame
     }
   }

@@ -7,6 +7,7 @@ enum GameflowPhase: String, Codable {
   case readyCheck = "ReadyCheck"
   case champSelect = "ChampSelect"
   case inProgress = "InProgress"
+  case waitingForStats = "WaitingForStats"
   case preEndOfGame = "PreEndOfGame"
   case endOfGame = "EndOfGame"
 }
