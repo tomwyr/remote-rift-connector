@@ -1,0 +1,10 @@
+name: remote_rift_connector
+description: "A new Dart project."
+publish_to: "none"
+
+environment:
+  sdk: ^3.10.0
+
+workspace:
+  - packages/api
+  - packages/core
