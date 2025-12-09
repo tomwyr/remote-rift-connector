@@ -35,11 +35,11 @@ sealed class RemoteRiftState {
 
   Map<String, dynamic> sealedToJson() {
     return switch (this) {
-      PreGame() => {'type': 'preGame'},
-      Lobby object => {'type': 'lobby', ...object.toJson()},
-      Found object => {'type': 'found', ...object.toJson()},
-      InGame() => {'type': 'inGame'},
-      Unknown() => {'type': 'unknown'},
+      PreGame() => {'value': 'preGame'},
+      Lobby object => {'value': 'lobby', ...object.toJson()},
+      Found object => {'value': 'found', ...object.toJson()},
+      InGame() => {'value': 'inGame'},
+      Unknown() => {'value': 'unknown'},
     };
   }
 }

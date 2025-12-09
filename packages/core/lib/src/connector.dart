@@ -1,7 +1,6 @@
-import 'package:http/http.dart';
-
-import 'lcu/api_client.dart';
-import 'lcu/connection.dart';
+import 'common/http_client.dart';
+import 'lcu/lcu_api_client.dart';
+import 'lcu/lcu_connection.dart';
 import 'models.dart';
 
 class RemoteRiftConnector {
@@ -9,7 +8,7 @@ class RemoteRiftConnector {
     return RemoteRiftConnector._create(
       lcuApi: LcuApiClient(
         lcuConnection: LcuConnection(parser: LcuLockfileParser(), loader: LcuLockfileLoader()),
-        httpClient: Client(),
+        httpClient: ClientFactory.noCertificateVerification(),
       ),
     );
   }
@@ -19,7 +18,7 @@ class RemoteRiftConnector {
   final LcuApiClient lcuApi;
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
-    await for (var _ in .periodic(Duration.zero)) {
+    await for (var _ in .periodic(Duration(seconds: 1))) {
       yield await _runCatching(() async {
         final connection = await lcuApi.getHeartbeatConnection();
         return connection.stableConnection ? .ready : .unavailable;

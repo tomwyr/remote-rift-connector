@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'models.g.dart';
+part 'lcu_models.g.dart';
 
 @JsonEnum(alwaysCreate: true, fieldRename: FieldRename.pascal)
 enum GameflowPhase {

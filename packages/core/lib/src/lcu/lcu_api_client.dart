@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import 'connection.dart';
-import 'models.dart';
+import 'lcu_connection.dart';
+import 'lcu_models.dart';
 
 class LcuApiClient {
   LcuApiClient({required this.lcuConnection, required this.httpClient});
@@ -14,38 +14,38 @@ class LcuApiClient {
   static const _rankedSoloQueueId = 420;
 
   Future<HeartbeatConnection> getHeartbeatConnection() async {
-    final response = await request(.post, 'lol-heartbeat/v1/connection-status');
+    final response = await _request(.post, 'lol-heartbeat/v1/connection-status');
     return .fromJson(jsonDecode(response.body));
   }
 
   Future<GameflowPhase> getGameflowPhase() async {
-    final response = await request(.get, 'lol-gameflow/v1/gameflow-phase');
-    return .fromJson(response.body);
+    final response = await _request(.get, 'lol-gameflow/v1/gameflow-phase');
+    return .fromJson(jsonDecode(response.body));
   }
 
   Future<void> createLobby() async {
-    await request(.post, 'lol-lobby/v2/lobby', {'queueId': _rankedSoloQueueId});
+    await _request(.post, 'lol-lobby/v2/lobby', {'queueId': _rankedSoloQueueId});
   }
 
   Future<void> deleteLobby() async {
-    await request(.delete, 'lol-lobby/v2/lobby');
+    await _request(.delete, 'lol-lobby/v2/lobby');
   }
 
   Future<MatchmakingSearch> getMatchmakingSearch() async {
-    final response = await request(.get, 'lol-lobby/v2/lobby/matchmaking/search-state');
+    final response = await _request(.get, 'lol-lobby/v2/lobby/matchmaking/search-state');
     return .fromJson(jsonDecode(response.body));
   }
 
   Future<void> startMatchmakingSearch() async {
-    await request(.post, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.post, 'lol-lobby/v2/lobby/matchmaking/search');
   }
 
   Future<void> stopMatchmakingSearch() async {
-    await request(.delete, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.delete, 'lol-lobby/v2/lobby/matchmaking/search');
   }
 
   Future<ReadyCheck> getReadyCheck() async {
-    final response = await request(.get, 'lol-matchmaking/v1/ready-check');
+    final response = await _request(.get, 'lol-matchmaking/v1/ready-check');
     if (response.isSuccessful) {
       return .fromJson(jsonDecode(response.body));
     } else {
@@ -54,17 +54,17 @@ class LcuApiClient {
   }
 
   Future<void> acceptReadyCheck() async {
-    await request(.post, 'lol-matchmaking/v1/ready-check/accept');
+    await _request(.post, 'lol-matchmaking/v1/ready-check/accept');
   }
 
   Future<void> declineReadyCheck() async {
-    await request(.post, 'lol-matchmaking/v1/ready-check/decline');
+    await _request(.post, 'lol-matchmaking/v1/ready-check/decline');
   }
 
-  Future<Response> request(HttpMethod method, String path, [Map<String, dynamic>? body]) async {
+  Future<Response> _request(HttpMethod method, String path, [Map<String, dynamic>? body]) async {
     Future<Response> execute() async {
       final lockfileData = lcuConnection.getLockfileData();
-      return await requestHttp(method, path, body, lockfileData);
+      return await _runRequest(method, path, body, lockfileData);
     }
 
     try {
@@ -77,13 +77,13 @@ class LcuApiClient {
     }
   }
 
-  Future<Response> requestHttp(
+  Future<Response> _runRequest(
     HttpMethod method,
     String path,
     Map<String, dynamic>? body,
     LcuLockfileData lockfileData,
   ) async {
-    const baseUrl = 'https://127.0.0.1:(lockfileData.port)';
+    final baseUrl = 'https://127.0.0.1:${lockfileData.port}';
     final url = Uri.parse('$baseUrl/$path');
 
     final credentials = 'riot:${lockfileData.password}';
@@ -91,14 +91,11 @@ class LcuApiClient {
 
     final headers = {'Authorization': 'Basic $authorization', 'Content-Type': 'application/json'};
 
-    switch (method) {
-      case .get:
-        return get(url, headers: headers);
-      case .post:
-        return post(url, headers: headers, body: body);
-      case .delete:
-        return delete(url, headers: headers);
-    }
+    return await switch (method) {
+      .get => httpClient.get(url, headers: headers),
+      .post => httpClient.post(url, headers: headers, body: body),
+      .delete => httpClient.delete(url, headers: headers),
+    };
   }
 }
 
@@ -117,6 +114,9 @@ extension ErrorExtensions on Object {
   }
 
   bool get isConnectionError {
+    if (this is LcuConnectionError) {
+      return true;
+    }
     // switch self {
     // case is URLError, is LcuConnectionError:
     //   true
