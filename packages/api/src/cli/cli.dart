@@ -3,7 +3,7 @@ import 'package:args/args.dart';
 import 'cli_command.dart';
 
 class RemoteRiftCli {
-  late final _argParser = _createArgParser();
+  final _argParser = ArgParser()..configureCli();
 
   RemoteRiftCliCommand tryParse(List<String> arguments) {
     try {
@@ -15,24 +15,7 @@ class RemoteRiftCli {
   }
 
   void printUsage() {
-    print('Usage: dart run remote_rift_connector_api <flags> [arguments]');
-    print(_argParser.usage);
-  }
-
-  ArgParser _createArgParser() {
-    return ArgParser()
-      ..addFlag('help', negatable: false, help: 'Print this usage information.')
-      ..addOption(
-        'host',
-        mandatory: true,
-        help: 'The host name or IP address of the API exposed to client applications.',
-      )
-      ..addOption(
-        'port',
-        mandatory: false,
-        defaultsTo: '8080',
-        help: 'The port number of the API exposed to client applications.',
-      );
+    _argParser.printUsage();
   }
 
   RemoteRiftCliCommand? _parseCommand(ArgResults results) {
@@ -48,5 +31,27 @@ class RemoteRiftCli {
     }
 
     return null;
+  }
+}
+
+extension on ArgParser {
+  void configureCli() {
+    addFlag('help', negatable: false, help: 'Print this usage information.');
+    addOption(
+      'host',
+      mandatory: true,
+      help: 'The host name or IP address of the API exposed to client applications.',
+    );
+    addOption(
+      'port',
+      mandatory: false,
+      defaultsTo: '8080',
+      help: 'The port number of the API exposed to client applications.',
+    );
+  }
+
+  void printUsage() {
+    print('Usage: dart run remote_rift_connector_api <flags> [arguments]');
+    print(usage);
   }
 }
