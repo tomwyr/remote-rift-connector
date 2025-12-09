@@ -1,0 +1,35 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "remote-rift-connector",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
+      "program": "src/main.dart",
+      "args": [
+        "--host",
+        "${input:host}",
+        "--port",
+        "${input:port}",
+      ],
+      "flutterMode": "debug",
+    },
+  ],
+  "inputs": [
+    {
+      "id": "host",
+      "type": "promptString",
+      "description": "Connector API host address",
+    },
+    {
+      "id": "port",
+      "type": "promptString",
+      "description": "Connector API port number",
+      "default": "8080",
+    }
+  ]
+}
