@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:remote_rift_connector_core/remote_rift_connector_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 
 import 'api.dart';
-import 'connector.dart';
 
 extension RemoteRiftApiRouter on RemoteRiftApi {
   Router configureRouter() {
@@ -23,7 +23,7 @@ extension on Router {
 
     mountWs(route('watch'), (_, outbound) async {
       await for (var status in RemoteRiftConnector().getStatusStream()) {
-        outbound.addJson(status.toJson());
+        outbound.addJson(status.sealedToJson());
       }
     });
   }
@@ -33,12 +33,12 @@ extension on Router {
 
     getJson(route('current'), (request) async {
       final state = await RemoteRiftConnector().getCurrentState();
-      return .ok(state.toJson());
+      return .ok(state.sealedToJson());
     });
 
     mountWs(route('watch'), (_, outbound) async {
       await for (var state in RemoteRiftConnector().getCurrentSateStream()) {
-        outbound.addJson(state.toJson());
+        outbound.addJson(state.sealedToJson());
       }
     });
   }

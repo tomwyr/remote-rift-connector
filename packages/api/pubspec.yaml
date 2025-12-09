@@ -1,7 +1,7 @@
 name: remote_rift_connector_api
 description: A sample command-line application with basic argument parsing.
-version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+publish_to: none
+resolution: workspace
 
 environment:
   sdk: ^3.10.0
@@ -12,6 +12,9 @@ dependencies:
   shelf: ^1.4.2
   shelf_router: ^1.1.4
   shelf_web_socket: ^3.0.0
+
+  remote_rift_connector_core:
+    path: ../core
 
 dev_dependencies:
   lints: ^6.0.0
