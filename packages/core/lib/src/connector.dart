@@ -120,7 +120,7 @@ class RemoteRiftConnector {
     try {
       return RemoteRiftData(await resolve());
     } catch (error) {
-      if (error.isConnectionError) {
+      if (error case Exception(isConnectionError: true)) {
         return RemoteRiftError.unableToConnect;
       } else {
         return RemoteRiftError.unknown;
@@ -129,4 +129,9 @@ class RemoteRiftConnector {
   }
 }
 
-enum RemoteRiftStateError { notPreGame, notIdleState, notSearchingState, notPendingState }
+enum RemoteRiftStateError implements Exception {
+  notPreGame,
+  notIdleState,
+  notSearchingState,
+  notPendingState,
+}

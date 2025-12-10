@@ -4,3 +4,4 @@ linter:
   rules:
     - prefer_relative_imports
     - prefer_single_quotes
+    - only_throw_errors

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
 
@@ -70,7 +71,7 @@ class LcuApiClient {
     try {
       return await execute();
     } catch (error) {
-      if (!error.isLockfileError) rethrow;
+      if (error case Exception(isLockfileError: true)) rethrow;
       // Retry once in case the error was caused by stale lockfile
       lcuConnection.refreshLockfileData();
       return await execute();
@@ -93,7 +94,7 @@ class LcuApiClient {
 
     return await switch (method) {
       .get => httpClient.get(url, headers: headers),
-      .post => httpClient.post(url, headers: headers, body: body),
+      .post => httpClient.post(url, headers: headers, body: jsonEncode(body)),
       .delete => httpClient.delete(url, headers: headers),
     };
   }
@@ -107,22 +108,12 @@ extension on Response {
   }
 }
 
-extension ErrorExtensions on Object {
+extension ErrorExtensions on Exception {
   bool get isLockfileError {
-    // self is URLError
-    return false;
+    return this is SocketException;
   }
 
   bool get isConnectionError {
-    if (this is LcuConnectionError) {
-      return true;
-    }
-    // switch self {
-    // case is URLError, is LcuConnectionError:
-    //   true
-    // default:
-    //   false
-    // }
-    return false;
+    return this is LcuConnectionError || this is SocketException;
   }
 }

@@ -54,7 +54,7 @@ enum ReadyCheckState { invalid, inProgress }
 enum ReadyCheckResponse { none, accepted, declined }
 
 @JsonSerializable()
-class ReadyCheckError {
+class ReadyCheckError implements Exception {
   ReadyCheckError({required this.httpStatus, required this.message});
 
   final int httpStatus;

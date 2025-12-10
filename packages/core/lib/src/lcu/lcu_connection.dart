@@ -71,4 +71,8 @@ class LcuLockfileData {
   final String password;
 }
 
-enum LcuConnectionError { unsupportedPlatform, lockfileMissing, lockfileInvalid }
+enum LcuConnectionError implements Exception {
+  unsupportedPlatform,
+  lockfileMissing,
+  lockfileInvalid,
+}
