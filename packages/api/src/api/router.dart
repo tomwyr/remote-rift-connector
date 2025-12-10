@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:remote_rift_connector_core/remote_rift_connector_core.dart';
-import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:shelf_web_socket/shelf_web_socket.dart';
 
 import 'api.dart';
+import 'handlers.dart';
 
 extension RemoteRiftApiRouter on RemoteRiftApi {
   Router configureRouter() {
@@ -21,9 +18,10 @@ extension on Router {
   void configureStatus() {
     String route(String value) => '/status/$value';
 
-    mountWs(route('watch'), (_, outbound) async {
+    mountWs(route('watch'), (webSocket) async {
       await for (var status in RemoteRiftConnector().getStatusStream()) {
-        outbound.addJson(status.sealedToJson());
+        if (webSocket.status == .closed) break;
+        webSocket.sink.addJson(status.sealedToJson());
       }
     });
   }
@@ -36,9 +34,10 @@ extension on Router {
       return .ok(state.sealedToJson());
     });
 
-    mountWs(route('watch'), (_, outbound) async {
+    mountWs(route('watch'), (webSocket) async {
       await for (var state in RemoteRiftConnector().getCurrentSateStream()) {
-        outbound.addJson(state.sealedToJson());
+        if (webSocket.status == .closed) break;
+        webSocket.sink.addJson(state.sealedToJson());
       }
     });
   }
@@ -79,33 +78,5 @@ extension on Router {
       await RemoteRiftConnector().declineMatch();
       return .noContent();
     });
-  }
-}
-
-extension on Router {
-  void getJson(String route, RequestHandler handler) {
-    get(route, handler);
-  }
-
-  void postJson(String route, RequestHandler handler) {
-    post(route, handler);
-  }
-
-  void mountWs(String prefix, WebSocketHandler handler) {
-    mount(prefix, webSocketHandler((webSocket, _) => handler(webSocket.stream, webSocket.sink)));
-  }
-}
-
-typedef RequestHandler = Future<JsonResponse> Function(Request request);
-typedef WebSocketHandler = void Function(Stream inbound, Sink outbound);
-
-class JsonResponse extends Response {
-  JsonResponse.ok(Map<String, dynamic> json) : super.ok(jsonEncode(json));
-  JsonResponse.noContent() : super(204);
-}
-
-extension on Sink {
-  void addJson(Map<String, dynamic> json) {
-    add(jsonEncode(json));
   }
 }
