@@ -1,6 +1,6 @@
+import 'api/api.dart';
 import 'cli/cli.dart';
 import 'cli/cli_command.dart';
-import 'api/api.dart';
 
 void main(List<String> arguments) async {
   final cli = RemoteRiftCli();

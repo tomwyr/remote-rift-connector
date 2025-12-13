@@ -1,5 +1,5 @@
 name: remote_rift_connector
-description: "A new Dart project."
+description: "A local service that connects to and communicates with the League Client API."
 publish_to: "none"
 
 environment:
