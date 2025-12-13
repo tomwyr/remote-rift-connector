@@ -120,7 +120,7 @@ class RemoteRiftConnector {
     try {
       return RemoteRiftData(await resolve());
     } catch (error) {
-      if (error case Exception(isConnectionError: true)) {
+      if (error case LcuConnectionError() || LcuApiClientError()) {
         return RemoteRiftError.unableToConnect;
       } else {
         return RemoteRiftError.unknown;

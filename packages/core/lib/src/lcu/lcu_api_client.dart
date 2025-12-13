@@ -71,7 +71,9 @@ class LcuApiClient {
     try {
       return await execute();
     } catch (error) {
-      if (error case Exception(isLockfileError: true)) rethrow;
+      if (error case SocketException()) {
+        throw LcuApiClientError.unreachable;
+      }
       // Retry once in case the error was caused by stale lockfile
       lcuConnection.refreshLockfileData();
       return await execute();
@@ -108,12 +110,4 @@ extension on Response {
   }
 }
 
-extension ErrorExtensions on Exception {
-  bool get isLockfileError {
-    return this is SocketException;
-  }
-
-  bool get isConnectionError {
-    return this is LcuConnectionError || this is SocketException;
-  }
-}
+enum LcuApiClientError implements Exception { unreachable }
