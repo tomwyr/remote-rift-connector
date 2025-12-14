@@ -49,13 +49,13 @@ To run the connector service and allow connections from the mobile application:
 To run the project locally:
 
 1. Ensure Dart is installed.
-2. Run `dart pub get`.
-3. Run `dart run packages/api/src/main.dart --host <host> --port <port>`.
+2. Run `dart pub get` to install dependencies.
+3. Run the application using `dart run packages/api/src/main.dart --host <host> --port <port>`.
 
 > [!note]
 > Alternatively, run the _remote-rift-connector_ launch configuration from VS Code and provide the required parameters.
 
-4. After making changes to the source code, restart the service from the command line or use hot reload when running from VS Code.
+4. After making changes to the source code, restart the service from the command line or use hot reload when running from an IDE.
 
 ## Related Projects
 
