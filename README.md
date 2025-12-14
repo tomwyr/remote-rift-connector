@@ -36,9 +36,11 @@ To run the connector service and allow connections from the mobile application:
     RemoteRift --host <host> --port <port>
     ```
 
-    > [!note]
-    > To be able to connect from a mobile device, make sure to set the `host` parameter to the computer’s local network address, for example:
-    > `RemoteRift --host 192.168.10.52 --port 8080`
+    The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
+
+> [!important]
+> To be able to connect from a mobile device, make sure to set the `host` parameter to the computer’s local network address, for example:
+> `RemoteRift --host 192.168.10.52 --port 8080`
 
 3. Ensure the League client is running on the same machine.
 
@@ -50,8 +52,8 @@ To run the project locally:
 2. Run `dart pub get`.
 3. Run `dart run packages/api/src/main.dart --host <host> --port <port>`.
 
-    > [!note]
-    > Alternatively, run the _remote-rift-connector_ launch configuration from VS Code and provide the required parameters.
+> [!note]
+> Alternatively, run the _remote-rift-connector_ launch configuration from VS Code and provide the required parameters.
 
 4. After making changes to the source code, restart the service from the command line or use hot reload when running from VS Code.
 
