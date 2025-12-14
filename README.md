@@ -14,9 +14,9 @@ The project is built in Dart, allowing it to target both Windows and macOS from 
 
 The project consists of the following packages:
 
-- **core** - Provides integration with the LCU API (see [lcu directory](../packages/core/lib/src/lcu)) and exposes a service to interact with the game client (see [RemoteRiftConnector](../packages/core/lib/src/connector.dart)).
+- **core** - Provides integration with the LCU API (see [lcu directory](./packages/core/lib/src/lcu)) and exposes a service to interact with the game client (see [RemoteRiftConnector](./packages/core/lib/src/connector.dart)).
 
-- **api** - Wraps the **core** package, exposing it as a REST API (see [api directory](../packages/api/src/api)) and providing a minimal CLI to start the service (see [cli directory](../packages/api/src/cli)).
+- **api** - Wraps the **core** package, exposing it as a REST API (see [api directory](./packages/api/src/api)) and providing a minimal CLI to start the service (see [cli directory](./packages/api/src/cli)).
 
 When launched, the service starts an HTTP server that maps its endpoints to the **core** package's connector class. This allows clients to send commands and request data via HTTP, as well as receive continuous updates via WebSockets.
 
