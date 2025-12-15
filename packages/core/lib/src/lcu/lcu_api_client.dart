@@ -70,13 +70,14 @@ class LcuApiClient {
 
     try {
       return await execute();
-    } catch (error) {
-      if (error case SocketException()) {
-        throw LcuApiClientError.unreachable;
-      }
+    } on SocketException catch (_) {
       // Retry once in case the error was caused by stale lockfile
       lcuConnection.refreshLockfileData();
-      return await execute();
+      try {
+        return await execute();
+      } on SocketException catch (_) {
+        throw LcuApiClientError.unreachable;
+      }
     }
   }
 
