@@ -1,4 +1,5 @@
 import 'common/http_client.dart';
+import 'extensions.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
 import 'models.dart';
@@ -18,7 +19,7 @@ class RemoteRiftConnector {
   final LcuApiClient lcuApi;
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
-    await for (var _ in .periodic(Duration(seconds: 1))) {
+    await for (var _ in _tickStream(seconds: 1)) {
       yield await _runCatching(() async {
         final connection = await lcuApi.getHeartbeatConnection();
         return connection.stableConnection ? .ready : .unavailable;
@@ -28,7 +29,7 @@ class RemoteRiftConnector {
 
   Stream<RemoteRiftState> getCurrentSateStream() async* {
     RemoteRiftState? previousState;
-    await for (var _ in .periodic(Duration(seconds: 1))) {
+    await for (var _ in _tickStream(seconds: 1)) {
       if (await getCurrentState() case var state when state != previousState) {
         yield state;
         previousState = state;
@@ -114,6 +115,10 @@ class RemoteRiftConnector {
     } else {
       throw RemoteRiftStateError.notPendingState;
     }
+  }
+
+  Stream<void> _tickStream({required int seconds}) {
+    return .periodic(Duration(seconds: seconds)).startWith(null);
   }
 
   Future<RemoteRiftResponse<T>> _runCatching<T>(Future<T> Function() resolve) async {
