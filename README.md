@@ -50,7 +50,7 @@ To run the project locally:
 
 1. Ensure Dart is installed.
 2. Run `dart pub get` to install dependencies.
-3. Run the application using `dart run packages/api/src/main.dart --host <host> --port <port>`.
+3. Run the application using `dart run packages/api/lib/src/main.dart --host <host> --port <port>`.
 
 > [!tip]
 > Alternatively, run the _remote-rift-connector_ launch configuration from VS Code and provide the required parameters.
@@ -59,7 +59,7 @@ To run the project locally:
 
 ### Building project
 
-Run `dart compile exe src/main.dart` to compile the project into an executable.
+Run `dart compile exe packages/api/lib/src/main.dart` to compile the project into an executable.
 
 > [!tip]
 > Alternatively, use the `connector: build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/bin/remoterift`.

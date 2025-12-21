@@ -6,7 +6,7 @@
       "detail": "Compiles the Remote Rift Connector API into an executable",
       "group": "build",
       "type": "shell",
-      "command": "mkdir -p bin && dart compile exe --output bin/remoterift src/main.dart",
+      "command": "mkdir -p bin && dart compile exe --output bin/remoterift lib/src/main.dart",
       "options": {
         "cwd": "packages/api",
       },

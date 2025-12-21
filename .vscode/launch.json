@@ -9,7 +9,7 @@
       "request": "launch",
       "type": "dart",
       "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
-      "program": "src/main.dart",
+      "program": "lib/src/main.dart",
       "args": [
         "--host",
         "${input:host}",
