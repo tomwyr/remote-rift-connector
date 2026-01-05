@@ -1,10 +1,10 @@
 import 'package:remote_rift_connector_core/remote_rift_connector_core.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'api.dart';
 import 'handlers.dart';
+import 'service.dart';
 
-extension RemoteRiftApiRouter on RemoteRiftApi {
+extension RemoteRiftApiRouter on RemoteRiftApiService {
   Router configureRouter() {
     return Router()
       ..configureStatus()

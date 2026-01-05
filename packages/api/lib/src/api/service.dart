@@ -3,7 +3,7 @@ import 'package:shelf/shelf_io.dart';
 import 'registry.dart';
 import 'router.dart';
 
-class RemoteRiftApi {
+class RemoteRiftApiService {
   Future<void> run({required String host, required int port}) async {
     final router = configureRouter();
     await serve(router.call, host, port);

@@ -13,11 +13,7 @@ class ServiceRegistry {
 
   Future<ServiceBroadcast> broadcast({required int port}) async {
     final broadcast = BonsoirBroadcast(
-      service: BonsoirService(
-        name: serviceName,
-        type: serviceType,
-        port: port,
-      ),
+      service: BonsoirService(name: serviceName, type: serviceType, port: port),
     );
 
     try {
@@ -88,6 +84,10 @@ class ServiceAddress {
 
   final String host;
   final int port;
+
+  String toAddressString() {
+    return '$host:$port';
+  }
 }
 
 extension on BonsoirActionHandler {

@@ -1,4 +1,4 @@
-import 'api/api.dart';
+import 'api/service.dart';
 import 'cli/cli.dart';
 import 'cli/cli_command.dart';
 
@@ -10,6 +10,6 @@ void main(List<String> arguments) async {
       cli.printUsage();
 
     case Run(:var host, :var port):
-      RemoteRiftApi().run(host: host, port: port);
+      RemoteRiftApiService().run(host: host, port: port);
   }
 }
