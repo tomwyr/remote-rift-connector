@@ -1,5 +1,6 @@
+import 'package:remote_rift_foundation_utils/remote_rift_foundation_utils.dart';
+
 import 'common/http_client.dart';
-import 'extensions.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
 import 'models.dart';

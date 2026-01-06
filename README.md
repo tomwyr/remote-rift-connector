@@ -32,11 +32,11 @@ To run the connector service and allow connections from the mobile application:
 
 2. Start the connector service API from the command line:
 
-    ```sh
-    remoterift --host <host> --port <port>
-    ```
+   ```sh
+   remoterift --host <host> --port <port>
+   ```
 
-    The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
+   The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
 
 > [!important]
 > To be able to connect from a mobile device, make sure to set the `host` parameter to the computer’s local network address, for example:
@@ -66,6 +66,7 @@ Run `dart compile exe packages/api/lib/src/main.dart` to compile the project int
 
 ## Related Projects
 
-- [Remote Rift Website](https://github.com/tomwyr/remote-rift-website) — A landing page showcasing the application and guiding users on getting started.
-- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) — A desktop application that launches and manages the local connector service.
-- [Remote Rift Mobile](https://github.com/tomwyr/remote-rift-mobile) — A mobile application that allows remote interaction with the League client.
+- [Remote Rift Website](https://github.com/tomwyr/remote-rift-website) - A landing page showcasing the application and guiding users on getting started.
+- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) - A desktop application that launches and manages the local connector service.
+- [Remote Rift Mobile](https://github.com/tomwyr/remote-rift-mobile) - A mobile application that allows remote interaction with the League client.
+- [Remote Rift Foundation](https://github.com/tomwyr/remote-rift-foundation) - A shared library containing common UI, utilities, and core logic used across Remote Rift projects.

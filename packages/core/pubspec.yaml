@@ -10,6 +10,9 @@ dependencies:
   json_annotation: ^4.9.0
   http: ^1.6.0
 
+  remote_rift_foundation_utils:
+    path: ../../../remote-rift-foundation/packages/utils
+
 dev_dependencies:
   build_runner: ^2.10.4
   json_serializable: ^6.11.3
