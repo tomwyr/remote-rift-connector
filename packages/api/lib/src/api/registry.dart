@@ -26,7 +26,7 @@ class ServiceRegistry {
     }
   }
 
-  Future<ServiceAddress?> discover() async {
+  Future<ServiceAddress?> discover({Duration? timeLimit}) async {
     final discovery = BonsoirDiscovery(type: serviceType);
 
     try {
@@ -34,7 +34,7 @@ class ServiceRegistry {
 
       /// Start listening for the service before running the discovery to avoid
       /// missing the result event while the listener is being set.
-      final result = _resolveService(discovery);
+      final result = _resolveService(discovery, timeLimit);
       await discovery.start();
       return await result;
     } finally {
@@ -42,8 +42,12 @@ class ServiceRegistry {
     }
   }
 
-  Future<ServiceAddress?> _resolveService(BonsoirDiscovery discovery) async {
-    final eventStream = discovery.eventStream ?? .empty();
+  Future<ServiceAddress?> _resolveService(BonsoirDiscovery discovery, Duration? timeLimit) async {
+    var eventStream = discovery.eventStream ?? .empty();
+    if (timeLimit != null) {
+      eventStream = eventStream.timeout(timeLimit, onTimeout: (sink) => sink.close());
+    }
+
     await for (var event in eventStream) {
       switch (event) {
         case BonsoirDiscoveryServiceFoundEvent():

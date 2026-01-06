@@ -18,8 +18,8 @@ class RemoteRiftApiService {
     return broadcast;
   }
 
-  Future<ServiceAddress?> findAddress() async {
+  Future<ServiceAddress?> findAddress({Duration? timeLimit}) async {
     final registry = ServiceRegistry.remoteRift();
-    return await registry.discover();
+    return await registry.discover(timeLimit: timeLimit);
   }
 }
