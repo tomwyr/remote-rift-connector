@@ -1,4 +1,4 @@
-import 'package:remote_rift_connector_core/remote_rift_connector_core.dart';
+import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'handlers.dart';

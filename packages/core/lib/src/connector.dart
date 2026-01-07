@@ -1,4 +1,4 @@
-import 'package:remote_rift_foundation_utils/remote_rift_foundation_utils.dart';
+import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import 'common/http_client.dart';
 import 'lcu/lcu_api_client.dart';

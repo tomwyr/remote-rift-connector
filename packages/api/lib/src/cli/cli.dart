@@ -51,7 +51,7 @@ extension on ArgParser {
   }
 
   void printUsage() {
-    print('Usage: dart run remote_rift_connector_api <flags> [arguments]');
+    print('Usage: dart run remote_rift_api <flags> [arguments]');
     print(usage);
   }
 }

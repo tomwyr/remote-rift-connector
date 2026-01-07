@@ -1,4 +1,4 @@
-name: remote_rift_connector_core
+name: remote_rift_core
 description: A starting point for Dart libraries or applications.
 publish_to: none
 resolution: workspace
@@ -10,7 +10,7 @@ dependencies:
   json_annotation: ^4.9.0
   http: ^1.6.0
 
-  remote_rift_foundation_utils:
+  remote_rift_utils:
     path: ../../../remote-rift-foundation/packages/utils
 
 dev_dependencies:

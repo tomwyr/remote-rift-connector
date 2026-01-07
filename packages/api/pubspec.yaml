@@ -1,4 +1,4 @@
-name: remote_rift_connector_api
+name: remote_rift_api
 description: A sample command-line application with basic argument parsing.
 publish_to: none
 resolution: workspace
@@ -15,7 +15,7 @@ dependencies:
   web_socket_channel: ^3.0.3
   bonsoir: ^6.0.1
 
-  remote_rift_connector_core:
+  remote_rift_core:
     path: ../core
 
 dev_dependencies:
