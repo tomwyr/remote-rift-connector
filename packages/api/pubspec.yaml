@@ -1,7 +1,6 @@
 name: remote_rift_api
 description: A sample command-line application with basic argument parsing.
 publish_to: none
-resolution: workspace
 
 environment:
   sdk: ^3.10.0

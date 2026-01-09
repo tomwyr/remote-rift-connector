@@ -1,7 +1,6 @@
 name: remote_rift_core
 description: A starting point for Dart libraries or applications.
 publish_to: none
-resolution: workspace
 
 environment:
   sdk: ^3.10.0
