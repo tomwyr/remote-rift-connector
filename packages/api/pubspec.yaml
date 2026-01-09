@@ -16,7 +16,10 @@ dependencies:
   bonsoir: ^6.0.1
 
   remote_rift_core:
-    path: ../core
+    git:
+      url: https://github.com/tomwyr/remote-rift-connector.git
+      ref: 0.6.0
+      path: packages/core
 
 dev_dependencies:
   test: ^1.25.6
