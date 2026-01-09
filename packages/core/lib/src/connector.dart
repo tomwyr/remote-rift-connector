@@ -3,7 +3,9 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'common/http_client.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
-import 'models.dart';
+import 'models/response.dart';
+import 'models/state.dart';
+import 'models/status.dart';
 
 class RemoteRiftConnector {
   factory RemoteRiftConnector() {

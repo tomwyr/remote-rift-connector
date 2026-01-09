@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'models.dart';
+part of 'state.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -29,14 +29,4 @@ const _$GameFoundStateEnumMap = {
   GameFoundState.pending: 'pending',
   GameFoundState.accepted: 'accepted',
   GameFoundState.declined: 'declined',
-};
-
-const _$RemoteRiftStatusEnumMap = {
-  RemoteRiftStatus.ready: 'ready',
-  RemoteRiftStatus.unavailable: 'unavailable',
-};
-
-const _$RemoteRiftErrorEnumMap = {
-  RemoteRiftError.unableToConnect: 'unableToConnect',
-  RemoteRiftError.unknown: 'unknown',
 };
