@@ -5,3 +5,5 @@ bin
 
 # macOS related
 .DS_Store
+
+.flutter-plugins-dependencies

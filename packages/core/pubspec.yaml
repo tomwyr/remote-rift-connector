@@ -11,7 +11,11 @@ dependencies:
   http: ^1.6.0
 
   remote_rift_utils:
-    path: ../../../remote-rift-foundation/packages/utils
+    git:
+      url: https://github.com/tomwyr/remote-rift-foundation.git
+      ref: 0.5.0
+      path: packages/utils
+
   equatable: ^2.0.8
 
 dev_dependencies:
