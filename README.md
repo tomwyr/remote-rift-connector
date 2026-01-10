@@ -32,6 +32,14 @@ The project uses mDNS to enable automatic service discovery and registration on 
 
 This is achieved through the [Bonsoir](https://pub.dev/packages/bonsoir) package, which handles broadcasting the service and discovering available instances on the network. For more information on how service discovery and registration work, see the [ServiceRegistry](./packages/api/lib/src/api/registry.dart) class.
 
+### Dependencies
+
+This section describes selected third-party packages used throughout the application:
+
+- [shelf](https://pub.dev/packages/shelf) - Lightweight HTTP server used to expose local APIs and handle incoming requests.
+
+- [bonsoir](https://pub.dev/packages/bonsoir) - mDNS/DNS-SD service discovery for advertising and discovering services on the local network.
+
 ## Usage
 
 To run the connector service and allow connections from the mobile application:
