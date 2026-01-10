@@ -22,7 +22,15 @@ When launched, the service starts an HTTP server that maps its endpoints to the 
 
 ### Authentication
 
-The LCU API requires authenticating using credentials obtained from a lockfile stored in the game directory while the client is running. If the service is launched while the League client is not active or if the lockfile is missing, the connector API will be unable to communicate with the game and will return a relevant error response.
+The LCU API requires authenticating using credentials obtained from a lockfile stored in the game directory while the client is running. When connecting to the LCU API, the service attempts to read the credentials automatically from the default location based on the host operating system.
+
+If the service is launched while the League client is not active or if the lockfile is missing, the connector API will be unable to communicate with the game and will return a relevant error response.
+
+### Service discovery
+
+The project uses mDNS to enable automatic service discovery and registration on the local network. When the connector service starts, it advertises itself using the `_remoterift._tcp` service type, allowing Remote Rift mobile and desktop clients to detect and connect to the service without manual configuration.
+
+This is achieved through the [Bonsoir](https://pub.dev/packages/bonsoir) package, which handles broadcasting the service and discovering available instances on the network. For more information on how service discovery and registration work, see the [ServiceRegistry](./packages/api/lib/src/api/registry.dart) class.
 
 ## Usage
 
