@@ -1,3 +1,7 @@
+## [0.6.1] - 2026-01-10
+
+- Moved service registry to foundation
+
 ## [0.6.0] - 2026-01-09
 
 - Added support for automatic detection of the API adddress

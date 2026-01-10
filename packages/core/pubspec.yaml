@@ -1,5 +1,4 @@
 name: remote_rift_core
-description: A starting point for Dart libraries or applications.
 publish_to: none
 
 environment:
@@ -8,14 +7,13 @@ environment:
 dependencies:
   json_annotation: ^4.9.0
   http: ^1.6.0
+  equatable: ^2.0.8
 
   remote_rift_utils:
     git:
       url: https://github.com/tomwyr/remote-rift-foundation.git
-      ref: 0.5.0
+      ref: 0.5.1
       path: packages/utils
-
-  equatable: ^2.0.8
 
 dev_dependencies:
   build_runner: ^2.10.4
