@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'config_error.dart';
+
 enum RemoteRiftApiConfigSource { environment, systemLookup }
 
 class RemoteRiftApiConfig {
@@ -8,7 +10,9 @@ class RemoteRiftApiConfig {
   final String host;
   final int port;
 
-  static const _defaultPort = 8080;
+  static const envHostKey = 'API_HOST';
+  static const envPortKey = 'API_PORT';
+  static const defaultPort = 8080;
 
   static Future<RemoteRiftApiConfig> resolve({required RemoteRiftApiConfigSource source}) async {
     return switch (source) {
@@ -18,20 +22,18 @@ class RemoteRiftApiConfig {
   }
 
   static RemoteRiftApiConfig _readFromEnvironment() {
-    const hostKey = 'API_HOST';
-    const host = String.fromEnvironment(hostKey);
+    const host = String.fromEnvironment(envHostKey);
     if (host.isEmpty) {
-      throw StateError('$hostKey must be provided');
+      throw AddressHostMissing();
     }
 
-    const portKey = 'API_PORT';
-    const portStr = String.fromEnvironment(portKey);
+    const portStr = String.fromEnvironment(envPortKey);
     if (portStr.isEmpty) {
-      throw StateError('$portKey must be provided');
+      throw AddressPortMissing();
     }
     final port = int.tryParse(portStr);
     if (port == null) {
-      throw StateError('Invalid $portKey: "$portStr"');
+      throw AddressPortInvalid(input: portStr);
     }
 
     return .new(host: host, port: port);
@@ -48,12 +50,12 @@ class RemoteRiftApiConfig {
     }
 
     if (addresses.isEmpty) {
-      throw StateError('No IPv4 network is connected');
+      throw AddressNotFound();
     }
     if (addresses.length > 1) {
-      throw StateError('Multiple IPv4 networks are connected');
+      throw MultipleAddressesFound();
     }
 
-    return .new(host: addresses.single.address, port: _defaultPort);
+    return .new(host: addresses.single.address, port: defaultPort);
   }
 }
