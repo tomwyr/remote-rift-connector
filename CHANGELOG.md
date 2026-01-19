@@ -1,3 +1,7 @@
+## [0.7.0] - 2026-01-19
+
+- Added versioning to internal packages
+
 ## [0.6.1] - 2026-01-10
 
 - Moved service registry to foundation

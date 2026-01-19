@@ -1,6 +1,6 @@
 name: remote_rift_connector
 description: "A local service that connects to and communicates with the League Client API."
-version: 0.6.1
+version: 0.7.0
 publish_to: "none"
 
 environment:
@@ -8,3 +8,9 @@ environment:
 
 dev_dependencies:
   lints: ^6.0.0
+
+  remote_rift_tools:
+    git:
+      url: https://github.com/tomwyr/remote-rift-foundation.git
+      ref: 0.6.0
+      path: packages/tools
