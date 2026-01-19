@@ -34,7 +34,9 @@ This section describes selected third-party packages used throughout the applica
 
 ## Usage
 
-To run the connector service and allow connections from the mobile application:
+> [!warning]
+> Due to the mobile project’s `bonsoir` dependency, which requires Flutter, the connector service is incompatible with the mobile application without the desktop wrapper.
+> The service can still be started and accessed without automatic address discovery.
 
 1. Download the latest executable from the [releases page](https://github.com/tomwyr/remote-rift-connector/releases) for your operating system. Builds are available for Windows and macOS.
 
@@ -47,7 +49,7 @@ To run the connector service and allow connections from the mobile application:
    The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
 
 > [!important]
-> To be able to connect from a mobile device, make sure to set the `host` parameter to the computer’s local network address, for example:
+> To be able to connect from another device, make sure to set the `host` parameter to the host device's local network address, for example:
 > `remoterift --host 192.168.10.52 --port 8080`
 
 3. Ensure the League client is running on the same machine.
