@@ -1,3 +1,8 @@
+## [0.8.0] - 2026-01-20
+
+- Added resolving API config from environment and system lookup
+- Added `--resolve-address` flag to CLI
+
 ## [0.7.0] - 2026-01-19
 
 - Added versioning to internal packages
