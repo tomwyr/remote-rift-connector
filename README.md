@@ -26,6 +26,14 @@ The LCU API requires authenticating using credentials obtained from a lockfile s
 
 If the service is launched while the League client is not active or if the lockfile is missing, the connector API will be unable to communicate with the game and will return a relevant error response.
 
+### Address resolution
+
+When started with `--resolve-address`, the connector scans the host machine’s network interfaces to find a usable local IPv4 address.
+Automatic address resolution binds the service to a single suitable local network address.
+
+> [!important]
+> If no address or multiple addresses are detected, startup is aborted and the host must be configured manually.
+
 ### Dependencies
 
 This section describes selected third-party packages used throughout the application:
@@ -40,10 +48,14 @@ This section describes selected third-party packages used throughout the applica
 
 1. Download the latest executable from the [releases page](https://github.com/tomwyr/remote-rift-connector/releases) for your operating system. Builds are available for Windows and macOS.
 
-2. Start the connector service API from the command line:
+2. Start the connector service API from the command line in one of the available modes:
 
    ```sh
-   remoterift --host <host> --port <port>
+      # Explicit host and port
+      remoterift --host <host> --port <port>
+
+      # Automatic address lookup
+      remoterift --resolve-address
    ```
 
    The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
@@ -60,7 +72,15 @@ To run the project locally:
 
 1. Ensure Dart is installed.
 2. Run `dart pub get` to install dependencies.
-3. Run the application using `dart run packages/api/lib/src/main.dart --host <host> --port <port>`.
+3. Run the application in one of the available modes:
+
+```sh
+# Explicit host and port
+dart run packages/api/lib/src/main.dart --host <host> --port <port>
+
+# Automatic address lookup
+dart run packages/api/lib/src/main.dart --resolve-address
+```
 
 > [!tip]
 > Alternatively, run the _remote-rift-connector_ launch configuration from VS Code and provide the required parameters.

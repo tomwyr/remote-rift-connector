@@ -23,6 +23,10 @@ class RemoteRiftCli {
       return Help();
     }
 
+    if (results.flag('resolve-address')) {
+      return RunWithAddressLookup();
+    }
+
     final host = results.option('host');
     final portValue = results.option('port');
     final port = portValue != null ? int.parse(portValue) : null;
@@ -37,14 +41,17 @@ class RemoteRiftCli {
 extension on ArgParser {
   void configureCli() {
     addFlag('help', negatable: false, help: 'Print this usage information.');
+    addFlag(
+      'resolve-address',
+      negatable: false,
+      help: 'Resolve API address by looking up the device\'s network addresses',
+    );
     addOption(
       'host',
-      mandatory: true,
       help: 'The host name or IP address of the API exposed to client applications.',
     );
     addOption(
       'port',
-      mandatory: false,
       defaultsTo: '8080',
       help: 'The port number of the API exposed to client applications.',
     );

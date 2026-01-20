@@ -9,4 +9,6 @@ class Run extends RemoteRiftCliCommand {
   final int port;
 }
 
+class RunWithAddressLookup extends RemoteRiftCliCommand {}
+
 class Invalid extends RemoteRiftCliCommand {}

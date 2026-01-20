@@ -11,12 +11,21 @@
       "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
       "program": "lib/src/main.dart",
       "args": [
+        "--resolve-address"
+      ],
+    },
+    {
+      "name": "remote-rift-connector:custom-address",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
+      "program": "lib/src/main.dart",
+      "args": [
         "--host",
         "${input:host}",
         "--port",
         "${input:port}",
       ],
-      "flutterMode": "debug",
     },
   ],
   "inputs": [
