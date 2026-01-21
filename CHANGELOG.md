@@ -1,3 +1,7 @@
+## [0.8.1] - 2026-01-21
+
+- Fixed incorrect core package dependency
+
 ## [0.8.0] - 2026-01-20
 
 - Added resolving API config from environment and system lookup
