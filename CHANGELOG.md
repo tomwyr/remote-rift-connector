@@ -1,5 +1,7 @@
-## [0.8.1] - 2026-01-21
+## [0.9.0] - 2026-01-22
 
+- Added support for resolving API address when multiple are available
+- Exposed `HttpServer` to service runner callers
 - Fixed incorrect core package dependency
 
 ## [0.8.0] - 2026-01-20
