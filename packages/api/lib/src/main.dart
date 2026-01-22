@@ -14,7 +14,7 @@ void main(List<String> arguments) async {
       RemoteRiftApiService().run(host: host, port: port);
 
     case RunWithAddressLookup():
-      final RemoteRiftApiConfig(:host, :port) = await .resolve(source: .systemLookup);
+      final RemoteRiftApiConfig(:host, :port) = await .resolve(source: .systemLookup());
       RemoteRiftApiService().run(host: host, port: port);
   }
 }

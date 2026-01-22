@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'config_error.dart';
-
-enum RemoteRiftApiConfigSource { environment, systemLookup }
+import 'config_source.dart';
 
 class RemoteRiftApiConfig {
   RemoteRiftApiConfig({required this.host, required this.port});
@@ -16,8 +15,8 @@ class RemoteRiftApiConfig {
 
   static Future<RemoteRiftApiConfig> resolve({required RemoteRiftApiConfigSource source}) async {
     return switch (source) {
-      .environment => _readFromEnvironment(),
-      .systemLookup => await _lookupDeviceNetworks(),
+      EnvironmentSource() => _readFromEnvironment(),
+      SystemLookupSource(:var resolveAddress) => await _lookupDeviceNetworks(resolveAddress),
     };
   }
 
@@ -39,12 +38,14 @@ class RemoteRiftApiConfig {
     return .new(host: host, port: port);
   }
 
-  static Future<RemoteRiftApiConfig> _lookupDeviceNetworks() async {
-    final addresses = <InternetAddress>[];
+  static Future<RemoteRiftApiConfig> _lookupDeviceNetworks(
+    SystemLookupAddressResolver? resolver,
+  ) async {
+    final addresses = <String>[];
     for (var interface in await NetworkInterface.list()) {
       for (var address in interface.addresses) {
         if (address.type == .IPv4 && !address.isLoopback) {
-          addresses.add(address);
+          addresses.add(address.address);
         }
       }
     }
@@ -52,10 +53,17 @@ class RemoteRiftApiConfig {
     if (addresses.isEmpty) {
       throw AddressNotFound();
     }
-    if (addresses.length > 1) {
+    if (addresses.length > 1 && resolver == null) {
       throw MultipleAddressesFound();
     }
 
-    return .new(host: addresses.single.address, port: defaultPort);
+    String host;
+    if (addresses.length > 1 && resolver != null) {
+      host = resolver(addresses);
+    } else {
+      host = addresses.first;
+    }
+
+    return .new(host: host, port: defaultPort);
   }
 }
