@@ -12,8 +12,6 @@ class LcuApiClient {
   final LcuConnection lcuConnection;
   final Client httpClient;
 
-  static const _rankedSoloQueueId = 420;
-
   Future<HeartbeatConnection> getHeartbeatConnection() async {
     final response = await _request(.post, 'lol-heartbeat/v1/connection-status');
     return .fromJson(jsonDecode(response.body));
@@ -24,8 +22,8 @@ class LcuApiClient {
     return .fromJson(jsonDecode(response.body));
   }
 
-  Future<void> createLobby() async {
-    await _request(.post, 'lol-lobby/v2/lobby', {'queueId': _rankedSoloQueueId});
+  Future<void> createLobby({required int queueId}) async {
+    await _request(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
   }
 
   Future<void> deleteLobby() async {

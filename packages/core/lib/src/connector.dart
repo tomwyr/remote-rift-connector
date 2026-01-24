@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import 'common/http_client.dart';
@@ -20,6 +22,9 @@ class RemoteRiftConnector {
   RemoteRiftConnector._init({required this.lcuApi});
 
   final LcuApiClient lcuApi;
+
+  static const _rankedSoloQueueId = 420;
+  static const _readyCheckMaxTimeSeconds = 10.0;
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     await for (var _ in _tickStream(seconds: 1)) {
@@ -58,14 +63,23 @@ class RemoteRiftConnector {
 
       case .readyCheck:
         final readyCheck = await lcuApi.getReadyCheck();
-        return switch (readyCheck.state) {
-          .inProgress => switch (readyCheck.playerResponse) {
-            .none => Found(state: .pending),
-            .accepted => Found(state: .accepted),
-            .declined => Found(state: .declined),
-          },
-          .invalid => Unknown(),
-        };
+        switch (readyCheck.state) {
+          case .inProgress:
+            final GameFoundState state = switch (readyCheck.playerResponse) {
+              .none => .pending,
+              .accepted => .accepted,
+              .declined => .declined,
+            };
+            final answerTimeLeft = max(_readyCheckMaxTimeSeconds - readyCheck.timer, 0.0);
+            return Found(
+              state: state,
+              answerMaxTime: _readyCheckMaxTimeSeconds,
+              answerTimeLeft: answerTimeLeft,
+            );
+
+          case .invalid:
+            return Unknown();
+        }
 
       case .champSelect || .inProgress || .waitingForStats || .preEndOfGame || .endOfGame:
         return InGame();
@@ -74,7 +88,7 @@ class RemoteRiftConnector {
 
   Future<void> createLobby() async {
     if (await getCurrentState() case PreGame()) {
-      await lcuApi.createLobby();
+      await lcuApi.createLobby(queueId: _rankedSoloQueueId);
     } else {
       throw RemoteRiftStateError.notPreGame;
     }

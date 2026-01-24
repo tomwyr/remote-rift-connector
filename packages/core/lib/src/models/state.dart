@@ -50,9 +50,11 @@ class Lobby extends RemoteRiftState {
 
 @JsonSerializable()
 class Found extends RemoteRiftState {
-  const Found({required this.state});
+  const Found({required this.state, required this.answerMaxTime, required this.answerTimeLeft});
 
   final GameFoundState state;
+  final double answerMaxTime;
+  final double answerTimeLeft;
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 

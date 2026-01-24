@@ -18,11 +18,16 @@ const _$GameLobbyStateEnumMap = {
   GameLobbyState.searching: 'searching',
 };
 
-Found _$FoundFromJson(Map<String, dynamic> json) =>
-    Found(state: $enumDecode(_$GameFoundStateEnumMap, json['state']));
+Found _$FoundFromJson(Map<String, dynamic> json) => Found(
+  state: $enumDecode(_$GameFoundStateEnumMap, json['state']),
+  answerMaxTime: (json['answerMaxTime'] as num).toDouble(),
+  answerTimeLeft: (json['answerTimeLeft'] as num).toDouble(),
+);
 
 Map<String, dynamic> _$FoundToJson(Found instance) => <String, dynamic>{
   'state': _$GameFoundStateEnumMap[instance.state]!,
+  'answerMaxTime': instance.answerMaxTime,
+  'answerTimeLeft': instance.answerTimeLeft,
 };
 
 const _$GameFoundStateEnumMap = {
