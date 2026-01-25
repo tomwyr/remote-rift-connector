@@ -8,7 +8,7 @@ extension RemoteRiftApiRouter on RemoteRiftApiService {
   Router configureRouter() {
     return Router()
       ..configureStatus()
-      ..configureState()
+      ..configureSession()
       ..configureLobby()
       ..configureQueue();
   }
@@ -26,18 +26,13 @@ extension on Router {
     });
   }
 
-  void configureState() {
-    String route(String value) => '/state/$value';
-
-    getJson(route('current'), (request) async {
-      final state = await RemoteRiftConnector().getCurrentState();
-      return .ok(state.sealedToJson());
-    });
+  void configureSession() {
+    String route(String value) => '/session/$value';
 
     mountWs(route('watch'), (webSocket) async {
-      await for (var state in RemoteRiftConnector().getCurrentSateStream()) {
+      await for (var session in RemoteRiftConnector().getCurrentSessionStream()) {
         if (webSocket.status == .closed) break;
-        webSocket.sink.addJson(state.sealedToJson());
+        webSocket.sink.addJson(session.toJson());
       }
     });
   }

@@ -6,6 +6,38 @@ part of 'lcu_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+GameflowSession _$GameflowSessionFromJson(Map<String, dynamic> json) =>
+    GameflowSession(
+      gameData: GameflowGameData.fromJson(
+        json['gameData'] as Map<String, dynamic>,
+      ),
+    );
+
+Map<String, dynamic> _$GameflowSessionToJson(GameflowSession instance) =>
+    <String, dynamic>{'gameData': instance.gameData};
+
+GameflowGameData _$GameflowGameDataFromJson(Map<String, dynamic> json) =>
+    GameflowGameData(
+      queue: GameflowQueue.fromJson(json['queue'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GameflowGameDataToJson(GameflowGameData instance) =>
+    <String, dynamic>{'queue': instance.queue};
+
+GameflowQueue _$GameflowQueueFromJson(Map<String, dynamic> json) =>
+    GameflowQueue(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      description: json['description'] as String,
+    );
+
+Map<String, dynamic> _$GameflowQueueToJson(GameflowQueue instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'description': instance.description,
+    };
+
 MatchmakingSearch _$MatchmakingSearchFromJson(Map<String, dynamic> json) =>
     MatchmakingSearch(
       searchState: $enumDecode(

@@ -6,6 +6,7 @@ import 'common/http_client.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
 import 'models/response.dart';
+import 'models/session.dart';
 import 'models/state.dart';
 import 'models/status.dart';
 
@@ -35,17 +36,35 @@ class RemoteRiftConnector {
     }
   }
 
-  Stream<RemoteRiftState> getCurrentSateStream() async* {
-    RemoteRiftState? previousState;
+  Stream<RemoteRiftSession> getCurrentSessionStream() async* {
+    RemoteRiftSession? previousSession;
     await for (var _ in _tickStream(seconds: 1)) {
-      if (await getCurrentState() case var state when state != previousState) {
-        yield state;
-        previousState = state;
+      if (await _getCurrentSession() case var session when session != previousSession) {
+        yield session;
+        previousSession = session;
       }
     }
   }
 
-  Future<RemoteRiftState> getCurrentState() async {
+  Future<RemoteRiftSession> _getCurrentSession() async {
+    var (queueName, state) = await (_getQueueNameOrNull(), _getCurrentState()).wait;
+    if (state case PreGame()) {
+      // Clear the queue if the session data is out of sync with the state.
+      queueName = null;
+    }
+    return RemoteRiftSession(queueName: queueName, state: state);
+  }
+
+  Future<String?> _getQueueNameOrNull() async {
+    try {
+      final session = await lcuApi.getGameflowSession();
+      return session.gameData.queue.description;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<RemoteRiftState> _getCurrentState() async {
     final gameflowPhase = await lcuApi.getGameflowPhase();
     switch (gameflowPhase) {
       case .none:
@@ -87,7 +106,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> createLobby() async {
-    if (await getCurrentState() case PreGame()) {
+    if (await _getCurrentState() case PreGame()) {
       await lcuApi.createLobby(queueId: _rankedSoloQueueId);
     } else {
       throw RemoteRiftStateError.notPreGame;
@@ -95,7 +114,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> leaveLobby() async {
-    if (await getCurrentState() case Lobby(state: .idle)) {
+    if (await _getCurrentState() case Lobby(state: .idle)) {
       await lcuApi.deleteLobby();
     } else {
       throw RemoteRiftStateError.notIdleState;
@@ -103,7 +122,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> searchMatch() async {
-    if (await getCurrentState() case Lobby(state: .idle)) {
+    if (await _getCurrentState() case Lobby(state: .idle)) {
       await lcuApi.startMatchmakingSearch();
     } else {
       throw RemoteRiftStateError.notIdleState;
@@ -111,7 +130,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> stopMatchSearch() async {
-    if (await getCurrentState() case Lobby(state: .searching)) {
+    if (await _getCurrentState() case Lobby(state: .searching)) {
       await lcuApi.stopMatchmakingSearch();
     } else {
       throw RemoteRiftStateError.notSearchingState;
@@ -119,7 +138,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> acceptMatch() async {
-    if (await getCurrentState() case Found(state: .pending)) {
+    if (await _getCurrentState() case Found(state: .pending)) {
       await lcuApi.acceptReadyCheck();
     } else {
       throw RemoteRiftStateError.notPendingState;
@@ -127,7 +146,7 @@ class RemoteRiftConnector {
   }
 
   Future<void> declineMatch() async {
-    if (await getCurrentState() case Found(state: .pending)) {
+    if (await _getCurrentState() case Found(state: .pending)) {
       await lcuApi.declineReadyCheck();
     } else {
       throw RemoteRiftStateError.notPendingState;

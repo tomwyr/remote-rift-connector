@@ -20,6 +20,41 @@ enum GameflowPhase {
 }
 
 @JsonSerializable()
+class GameflowSession {
+  GameflowSession({required this.gameData});
+
+  final GameflowGameData gameData;
+
+  factory GameflowSession.fromJson(Map<String, dynamic> json) => _$GameflowSessionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameflowSessionToJson(this);
+}
+
+@JsonSerializable()
+class GameflowGameData {
+  GameflowGameData({required this.queue});
+
+  final GameflowQueue queue;
+
+  factory GameflowGameData.fromJson(Map<String, dynamic> json) => _$GameflowGameDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameflowGameDataToJson(this);
+}
+
+@JsonSerializable()
+class GameflowQueue {
+  GameflowQueue({required this.id, required this.name, required this.description});
+
+  final int id;
+  final String name;
+  final String description;
+
+  factory GameflowQueue.fromJson(Map<String, dynamic> json) => _$GameflowQueueFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameflowQueueToJson(this);
+}
+
+@JsonSerializable()
 class MatchmakingSearch {
   MatchmakingSearch({required this.searchState});
 

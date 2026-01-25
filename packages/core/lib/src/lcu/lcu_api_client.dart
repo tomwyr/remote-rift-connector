@@ -22,6 +22,11 @@ class LcuApiClient {
     return .fromJson(jsonDecode(response.body));
   }
 
+  Future<GameflowSession> getGameflowSession() async {
+    final response = await _request(.get, 'lol-gameflow/v1/session');
+    return .fromJson(jsonDecode(response.body));
+  }
+
   Future<void> createLobby({required int queueId}) async {
     await _request(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
   }
