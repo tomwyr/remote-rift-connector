@@ -1,3 +1,8 @@
+## [0.10.0] - 2026-01-26
+
+- Added time left to `found` game state data
+- Exposed queue name in game session data
+
 ## [0.9.0] - 2026-01-22
 
 - Added support for resolving API address when multiple are available
