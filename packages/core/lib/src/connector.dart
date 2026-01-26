@@ -112,7 +112,6 @@ class RemoteRiftConnector {
     return queues
         .where(GameQueueFilter.shouldDisplay)
         .map(GameQueueMapper.fromLcu)
-        .nonNulls
         .toList();
   }
 

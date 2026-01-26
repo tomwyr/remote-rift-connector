@@ -2,7 +2,7 @@ import '../lcu/lcu_models.dart' as lcu;
 import '../models/queue.dart';
 
 class GameQueueMapper {
-  static GameQueue? fromLcu(lcu.GameQueue queue) {
+  static GameQueue fromLcu(lcu.GameQueue queue) {
     return GameQueue(
       id: queue.id,
       name: queue.description,
