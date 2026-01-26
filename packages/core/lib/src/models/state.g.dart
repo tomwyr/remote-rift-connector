@@ -6,6 +6,16 @@ part of 'state.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+PreGame _$PreGameFromJson(Map<String, dynamic> json) => PreGame(
+  availableQueues: (json['availableQueues'] as List<dynamic>)
+      .map((e) => GameQueue.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$PreGameToJson(PreGame instance) => <String, dynamic>{
+  'availableQueues': instance.availableQueues,
+};
+
 Lobby _$LobbyFromJson(Map<String, dynamic> json) =>
     Lobby(state: $enumDecode(_$GameLobbyStateEnumMap, json['state']));
 

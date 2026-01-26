@@ -55,6 +55,47 @@ class GameflowQueue {
 }
 
 @JsonSerializable()
+class GameQueue {
+  GameQueue({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.gameMode,
+    required this.gameSelectCategory,
+    required this.gameSelectModeGroup,
+    required this.isEnabled,
+    required this.isVisible,
+    required this.isCustom,
+  });
+
+  final int id;
+  final String name;
+  final String description;
+  final String gameMode;
+  final String gameSelectCategory;
+  final String gameSelectModeGroup;
+  final bool isEnabled;
+  final bool isVisible;
+  final bool isCustom;
+
+  factory GameQueue.fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameQueueToJson(this);
+}
+
+class GameSelectCategory {
+  static const pvp = 'kPvP';
+  static const versusAi = 'kVersusAI';
+}
+
+class GameSelectModeGroup {
+  static const summonersRift = 'kSummonersRift';
+  static const aram = 'kARAM';
+  static const alternativeLeagueGameModes = 'kAlternativeLeagueGameModes';
+  static const teamfightTactics = 'kTeamfightTactics';
+}
+
+@JsonSerializable()
 class MatchmakingSearch {
   MatchmakingSearch({required this.searchState});
 

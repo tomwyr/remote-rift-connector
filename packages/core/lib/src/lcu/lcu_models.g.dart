@@ -38,6 +38,30 @@ Map<String, dynamic> _$GameflowQueueToJson(GameflowQueue instance) =>
       'description': instance.description,
     };
 
+GameQueue _$GameQueueFromJson(Map<String, dynamic> json) => GameQueue(
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  description: json['description'] as String,
+  gameMode: json['gameMode'] as String,
+  gameSelectCategory: json['gameSelectCategory'] as String,
+  gameSelectModeGroup: json['gameSelectModeGroup'] as String,
+  isEnabled: json['isEnabled'] as bool,
+  isVisible: json['isVisible'] as bool,
+  isCustom: json['isCustom'] as bool,
+);
+
+Map<String, dynamic> _$GameQueueToJson(GameQueue instance) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'description': instance.description,
+  'gameMode': instance.gameMode,
+  'gameSelectCategory': instance.gameSelectCategory,
+  'gameSelectModeGroup': instance.gameSelectModeGroup,
+  'isEnabled': instance.isEnabled,
+  'isVisible': instance.isVisible,
+  'isCustom': instance.isCustom,
+};
+
 MatchmakingSearch _$MatchmakingSearchFromJson(Map<String, dynamic> json) =>
     MatchmakingSearch(
       searchState: $enumDecode(

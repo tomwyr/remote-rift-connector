@@ -5,6 +5,8 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'common/http_client.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
+import 'mappers/queue.dart';
+import 'models/queue.dart';
 import 'models/response.dart';
 import 'models/session.dart';
 import 'models/state.dart';
@@ -24,7 +26,6 @@ class RemoteRiftConnector {
 
   final LcuApiClient lcuApi;
 
-  static const _rankedSoloQueueId = 420;
   static const _readyCheckMaxTimeSeconds = 10.0;
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
@@ -68,7 +69,8 @@ class RemoteRiftConnector {
     final gameflowPhase = await lcuApi.getGameflowPhase();
     switch (gameflowPhase) {
       case .none:
-        return PreGame();
+        final availableQueues = await _getAvailableQueues();
+        return PreGame(availableQueues: availableQueues);
 
       case .lobby:
         return Lobby(state: .idle);
@@ -105,9 +107,18 @@ class RemoteRiftConnector {
     }
   }
 
-  Future<void> createLobby() async {
+  Future<List<GameQueue>> _getAvailableQueues() async {
+    final queues = await lcuApi.getGameQueues();
+    return queues
+        .where(GameQueueFilter.shouldDisplay)
+        .map(GameQueueMapper.fromLcu)
+        .nonNulls
+        .toList();
+  }
+
+  Future<void> createLobby({required int queueId}) async {
     if (await _getCurrentState() case PreGame()) {
-      await lcuApi.createLobby(queueId: _rankedSoloQueueId);
+      await lcuApi.createLobby(queueId: queueId);
     } else {
       throw RemoteRiftStateError.notPreGame;
     }

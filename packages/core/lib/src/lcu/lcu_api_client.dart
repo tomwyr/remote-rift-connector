@@ -27,6 +27,11 @@ class LcuApiClient {
     return .fromJson(jsonDecode(response.body));
   }
 
+  Future<List<GameQueue>> getGameQueues() async {
+    final response = await _request(.get, 'lol-game-queues/v1/queues');
+    return _listFromJson(jsonDecode(response.body), GameQueue.fromJson);
+  }
+
   Future<void> createLobby({required int queueId}) async {
     await _request(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
   }
@@ -103,6 +108,10 @@ class LcuApiClient {
       .post => httpClient.post(url, headers: headers, body: jsonEncode(body)),
       .delete => httpClient.delete(url, headers: headers),
     };
+  }
+
+  List<T> _listFromJson<T>(dynamic json, T Function(Map<String, dynamic> json) fromJson) {
+    return (json as List).cast<Map<String, dynamic>>().map(fromJson).toList();
   }
 }
 

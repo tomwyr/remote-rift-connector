@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'queue.dart';
+
 part 'state.g.dart';
 
 sealed class RemoteRiftState extends Equatable {
@@ -9,7 +11,7 @@ sealed class RemoteRiftState extends Equatable {
   factory RemoteRiftState.fromJson(Map<String, dynamic> json) {
     final type = json['value'];
     return switch (type) {
-      'preGame' => PreGame(),
+      'preGame' => PreGame.fromJson(json),
       'lobby' => Lobby.fromJson(json),
       'found' => Found.fromJson(json),
       'inGame' => InGame(),
@@ -20,7 +22,7 @@ sealed class RemoteRiftState extends Equatable {
 
   Map<String, dynamic> sealedToJson() {
     return switch (this) {
-      PreGame() => {'value': 'preGame'},
+      PreGame object => {'value': 'preGame', ...object.toJson()},
       Lobby object => {'value': 'lobby', ...object.toJson()},
       Found object => {'value': 'found', ...object.toJson()},
       InGame() => {'value': 'inGame'},
@@ -32,7 +34,19 @@ sealed class RemoteRiftState extends Equatable {
   List<Object?> get props => [];
 }
 
-class PreGame extends RemoteRiftState {}
+@JsonSerializable()
+class PreGame extends RemoteRiftState {
+  PreGame({required this.availableQueues});
+
+  final List<GameQueue> availableQueues;
+
+  factory PreGame.fromJson(Map<String, dynamic> json) => _$PreGameFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PreGameToJson(this);
+
+  @override
+  List<Object?> get props => [availableQueues];
+}
 
 @JsonSerializable()
 class Lobby extends RemoteRiftState {

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../converters/state_converter.dart';
+import '../converters/state.dart';
 import 'state.dart';
 
 part 'session.g.dart';
