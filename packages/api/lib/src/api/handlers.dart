@@ -28,6 +28,7 @@ extension SinkHandlers on Sink {
 class JsonResponse extends Response {
   JsonResponse.ok([Map<String, dynamic>? json]) : super.ok(json != null ? jsonEncode(json) : null);
   JsonResponse.noContent() : super(204);
+  JsonResponse.badRequest() : super(400);
 }
 
 typedef JsonRequestHandler = Future<JsonResponse> Function(Request request);

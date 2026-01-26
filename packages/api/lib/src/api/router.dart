@@ -1,6 +1,7 @@
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import 'extensions.dart';
 import 'handlers.dart';
 import 'service.dart';
 
@@ -41,7 +42,10 @@ extension on Router {
     String route(String value) => '/lobby/$value';
 
     postJson(route('create'), (request) async {
-      await RemoteRiftConnector().createLobby();
+      final queueId = request.intQueryParam('queueId');
+      if (queueId == null) return .badRequest();
+
+      await RemoteRiftConnector().createLobby(queueId: queueId);
       return .noContent();
     });
 
