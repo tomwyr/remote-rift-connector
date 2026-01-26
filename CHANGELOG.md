@@ -1,3 +1,8 @@
+## [0.11.0] - 2026-01-26
+
+- Added querying available queues
+- Added support for providing lobby queue ID
+
 ## [0.10.0] - 2026-01-26
 
 - Added time left to `found` game state data
