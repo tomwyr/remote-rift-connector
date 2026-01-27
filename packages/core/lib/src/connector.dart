@@ -56,10 +56,20 @@ class RemoteRiftConnector {
     return RemoteRiftSession(queueName: queueName, state: state);
   }
 
-  Future<String?> _getQueueNameOrNull() async {
+  Future<String?> _getQueueNameOrNull({bool retry = false}) async {
     try {
       final session = await lcuApi.getGameflowSession();
-      return session.gameData.queue.description;
+      final queue = session.gameData.queue;
+
+      // Retry fetching in rare cases where session data gets desynced
+      // from the state before the queue has been initialized.
+      if (queue.id == -1 && !retry) {
+        await Future.delayed(Duration(milliseconds: 100));
+        return _getQueueNameOrNull(retry: true);
+      }
+
+      final description = queue.description;
+      return description.isNotEmpty ? description : null;
     } catch (_) {
       return null;
     }
@@ -109,10 +119,7 @@ class RemoteRiftConnector {
 
   Future<List<GameQueue>> _getAvailableQueues() async {
     final queues = await lcuApi.getGameQueues();
-    return queues
-        .where(GameQueueFilter.shouldDisplay)
-        .map(GameQueueMapper.fromLcu)
-        .toList();
+    return queues.where(GameQueueFilter.shouldDisplay).map(GameQueueMapper.fromLcu).toList();
   }
 
   Future<void> createLobby({required int queueId}) async {
