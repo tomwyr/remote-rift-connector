@@ -13,10 +13,10 @@ packages:
     dependency: "direct dev"
     description:
       path: "packages/tools"
-      ref: "0.8.0"
-      resolved-ref: "751b8fd3c418a19375b145c1b2ae60516d21d58f"
+      ref: "0.8.1"
+      resolved-ref: e7f8d344ebf48b41ab338e545ad29f3059cb455f
       url: "https://github.com/tomwyr/remote-rift-foundation.git"
     source: git
-    version: "0.8.0"
+    version: "0.8.1"
 sdks:
   dart: ">=3.10.0 <4.0.0"
