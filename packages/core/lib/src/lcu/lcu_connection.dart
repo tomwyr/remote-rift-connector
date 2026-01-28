@@ -16,9 +16,14 @@ class LcuConnection {
   }
 
   LcuLockfileData refreshLockfileData() {
-    final data = parser.parseLockfile(loader.loadLockfile());
-    _lockfileData = data;
-    return data;
+    try {
+      final data = parser.parseLockfile(loader.loadLockfile());
+      _lockfileData = data;
+      return data;
+    } catch (_) {
+      _lockfileData = null;
+      rethrow;
+    }
   }
 }
 

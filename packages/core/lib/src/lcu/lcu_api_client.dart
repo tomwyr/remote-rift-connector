@@ -79,13 +79,15 @@ class LcuApiClient {
     try {
       return await execute();
     } on SocketException catch (_) {
-      // Retry once in case the error was caused by stale lockfile
+      // Retry once in case the error was caused by a stale lockfile.
       lcuConnection.refreshLockfileData();
       try {
         return await execute();
       } on SocketException catch (_) {
         throw LcuApiClientError.unreachable;
       }
+    } on ClientException catch (_) {
+      throw LcuApiClientError.connectionLost;
     }
   }
 
@@ -123,4 +125,4 @@ extension on Response {
   }
 }
 
-enum LcuApiClientError implements Exception { unreachable }
+enum LcuApiClientError implements Exception { unreachable, connectionLost }
