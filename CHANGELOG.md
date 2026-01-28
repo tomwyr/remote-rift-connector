@@ -1,3 +1,8 @@
+## [0.11.1] - 2026-01-28
+
+- Fixed queue name missing at times after creating lobby 
+- Fixed returning `unknown` error after closing game client
+
 ## [0.11.0] - 2026-01-26
 
 - Added querying available queues
