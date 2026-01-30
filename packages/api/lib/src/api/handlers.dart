@@ -39,3 +39,12 @@ enum WebSocketStatus { open, closed }
 extension WebSocketChannelStatus on WebSocketChannel {
   WebSocketStatus get status => closeCode == null ? .open : .closed;
 }
+
+extension RequestParsers on Request {
+  int? intQueryParam(String key) {
+    if (url.queryParameters[key] case var value?) {
+      return int.tryParse(value);
+    }
+    return null;
+  }
+}
