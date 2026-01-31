@@ -76,10 +76,10 @@ To run the project locally:
 
 ```sh
 # Explicit host and port
-dart run packages/api/lib/src/main.dart --host <host> --port <port>
+dart run packages/api/lib/src/api/main.dart --host <host> --port <port>
 
 # Automatic address lookup
-dart run packages/api/lib/src/main.dart --resolve-address
+dart run packages/api/lib/src/api/main.dart --resolve-address
 ```
 
 > [!tip]
@@ -89,7 +89,7 @@ dart run packages/api/lib/src/main.dart --resolve-address
 
 ### Building project
 
-Run `dart compile exe packages/api/lib/src/main.dart` to compile the project into an executable.
+Run `dart compile exe packages/api/lib/src/api/main.dart` to compile the project into an executable.
 
 > [!tip]
 > Alternatively, use the `connector: build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/bin/remoterift`.

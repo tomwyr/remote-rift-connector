@@ -9,7 +9,7 @@
       "request": "launch",
       "type": "dart",
       "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
-      "program": "lib/src/main.dart",
+      "program": "lib/src/cli/main.dart",
       "args": [
         "--resolve-address"
       ],
@@ -19,7 +19,7 @@
       "request": "launch",
       "type": "dart",
       "cwd": "${workspaceFolder:remote-rift-connector}/packages/api",
-      "program": "lib/src/main.dart",
+      "program": "lib/src/cli/main.dart",
       "args": [
         "--host",
         "${input:host}",
