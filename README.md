@@ -34,6 +34,19 @@ Automatic address resolution binds the service to a single suitable local networ
 > [!important]
 > If no address or multiple addresses are detected, startup is aborted and the host must be configured manually.
 
+### Assets
+
+The project uses Dart build hooks to embed text-based assets directly into the compiled executable. This approach overcomes the limitation of Dart projects that cannot bundle assets and avoids distributing additional files alongside the binary.
+
+During the build process assets are converted into generated `.asset.dart` files containing string constants. For example:
+
+- `pubspec.yaml` → `lib/src/assets/pubspec.asset.dart`
+
+These files are then imported and used directly in the codebase.
+
+> [!note]
+> Additional assets can be included by updating the build hook accordingly. For more details, see [hook/build.dart](./packages/api/hook/build.dart).
+
 ### Dependencies
 
 This section describes selected third-party packages used throughout the application:
@@ -92,7 +105,7 @@ dart run packages/api/lib/src/api/main.dart --resolve-address
 Run `dart compile exe packages/api/lib/src/api/main.dart` to compile the project into an executable.
 
 > [!tip]
-> Alternatively, use the `connector: build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/bin/remoterift`.
+> Alternatively, use the `connector: build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/build/bundle/bin/remoterift`.
 
 ## Related Projects
 
