@@ -18,7 +18,7 @@ extension on Router {
     String route(String value) => '/service/$value';
 
     getJson(route('info'), (request) async {
-      final info = await ApiServiceRepository().getInfo();
+      final info = await ApiServiceRepository().getServiceInfo();
       return .ok(info.toJson());
     });
   }

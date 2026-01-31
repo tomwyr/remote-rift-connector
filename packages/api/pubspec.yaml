@@ -8,7 +8,6 @@ environment:
 dependencies:
   args: ^2.7.0
   hooks: ^1.0.0
-  json_annotation: ^4.10.0
   path: ^1.9.1
   pubspec_parse: ^1.5.0
   shelf: ^1.4.2
@@ -22,7 +21,11 @@ dependencies:
       ref: 0.11.2
       path: packages/core
 
+  remote_rift_utils:
+    git:
+      url: https://github.com/tomwyr/remote-rift-foundation.git
+      ref: 0.8.1
+      path: packages/utils
+
 dev_dependencies:
   test: ^1.25.6
-  json_serializable: ^6.12.0
-  build_runner: ^2.10.5
