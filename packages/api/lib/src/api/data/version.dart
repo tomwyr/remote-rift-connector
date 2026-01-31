@@ -1,6 +1,6 @@
 import 'package:pubspec_parse/pubspec_parse.dart';
 
-import '../assets/pubspec.asset.dart';
+import '../../assets/pubspec.asset.dart';
 
 class ApiServiceVersion {
   Future<String> load() async {

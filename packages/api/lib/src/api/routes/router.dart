@@ -1,18 +1,16 @@
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../data/repository.dart';
 import 'handlers.dart';
-import 'service.dart';
 
-extension RemoteRiftApiRouter on RemoteRiftApiService {
-  Router configureRouter() {
-    return Router()
-      ..configureService()
-      ..configureStatus()
-      ..configureSession()
-      ..configureLobby()
-      ..configureQueue();
-  }
+Router configureRouter() {
+  return Router()
+    ..configureService()
+    ..configureStatus()
+    ..configureSession()
+    ..configureLobby()
+    ..configureQueue();
 }
 
 extension on Router {
@@ -20,7 +18,7 @@ extension on Router {
     String route(String value) => '/service/$value';
 
     getJson(route('info'), (request) async {
-      final info = await RemoteRiftApiService().getInfo();
+      final info = await ApiServiceRepository().getInfo();
       return .ok(info.toJson());
     });
   }
