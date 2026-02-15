@@ -36,16 +36,18 @@ Automatic address resolution binds the service to a single suitable local networ
 
 ### Assets
 
-The project uses Dart build hooks to embed text-based assets directly into the compiled executable. This approach overcomes the limitation of Dart projects that cannot bundle assets and avoids distributing additional files alongside the binary.
+The project uses the `_generate_assets_` script from `remote_rift_tools` to embed text-based assets directly into the compiled executable. This approach overcomes the limitation of Dart projects that cannot bundle assets and avoids distributing additional files alongside the binary.
 
-During the build process assets are converted into generated `.asset.dart` files containing string constants. For example:
+Running the script converts assets into `.asset.dart` files containing string constants. For example:
 
 - `pubspec.yaml` → `lib/src/assets/pubspec.asset.dart`
 
 These files are then imported and used directly in the codebase.
 
-> [!note]
-> Additional assets can be included by updating the build hook accordingly. For more details, see [hook/build.dart](./packages/api/hook/build.dart).
+Run `dart run remote_rift_tools:generate_asset pubspec lib/src/assets/pubspec.asset.dart` to generate the necessary assets as code.
+
+> [!tip]
+> Alternatively, use the `connector: generate assets` VS Code task to generate assets. The resulting source will be placed in `packages/api/lib/src/assets`.
 
 ### Dependencies
 

@@ -11,5 +11,16 @@
         "cwd": "packages/api",
       },
     },
+    {
+      "label": "connector: generate assets",
+      "detail": "Generates necessary project assets as Dart code",
+      "group": "none",
+      "type": "shell",
+      "command": "dart run remote_rift_tools:generate_asset pubspec lib/src/assets/pubspec.asset.dart",
+      "options": {
+        "cwd": "packages/api",
+      },
+      "problemMatcher": [],
+    }
   ],
 }

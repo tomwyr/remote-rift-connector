@@ -1,6 +1,6 @@
 name: remote_rift_api
 publish_to: none
-version: 0.11.2
+version: 0.12.0
 
 environment:
   sdk: ^3.10.0
@@ -18,13 +18,13 @@ dependencies:
   remote_rift_core:
     git:
       url: https://github.com/tomwyr/remote-rift-connector.git
-      ref: 0.11.2
+      ref: 0.12.0
       path: packages/core
 
   remote_rift_utils:
     git:
       url: https://github.com/tomwyr/remote-rift-foundation.git
-      ref: 0.8.1
+      ref: 0.9.0
       path: packages/utils
 
 dev_dependencies:
@@ -33,5 +33,5 @@ dev_dependencies:
   remote_rift_tools:
     git:
       url: https://github.com/tomwyr/remote-rift-foundation.git
-      ref: 0.8.1
+      ref: 0.9.0
       path: packages/tools

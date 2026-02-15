@@ -1,3 +1,8 @@
+## [0.12.0] - 2026-02-15
+
+- Exposed service version in the API
+- Moved service info model to foundation
+
 ## [0.11.2] - 2026-01-28
 
 - Updated internal dependencies
