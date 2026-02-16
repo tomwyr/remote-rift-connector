@@ -44,6 +44,9 @@ Running the script converts assets into `.asset.dart` files containing string co
 
 These files are then imported and used directly in the codebase.
 
+> [!important]
+> Because Dart does not yet support data assets in its build system, project assets must be generated manually whenever their source files change.
+
 ### Dependencies
 
 This section describes selected third-party packages used throughout the application:

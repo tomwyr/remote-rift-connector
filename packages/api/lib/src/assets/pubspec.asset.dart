@@ -1,3 +1,5 @@
+class PubspecAsset {
+  static Future<String> load() async => '''
 name: remote_rift_api
 publish_to: none
 version: 0.12.1
@@ -35,3 +37,6 @@ dev_dependencies:
       url: https://github.com/tomwyr/remote-rift-foundation.git
       ref: 0.9.0
       path: packages/tools
+
+''';
+}

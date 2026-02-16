@@ -1,3 +1,7 @@
+## [0.12.1] - 2026-02-15
+
+- Fixed missing pubspec asset file
+
 ## [0.12.0] - 2026-02-15
 
 - Exposed service version in the API

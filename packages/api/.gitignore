@@ -10,9 +10,6 @@ pubspec_overrides.yaml
 # Build outputs
 build
 
-# Dart-based asset files
-**/*.asset.dart
-
 # macOS related
 .DS_Store
 
