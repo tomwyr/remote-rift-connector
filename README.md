@@ -44,11 +44,6 @@ Running the script converts assets into `.asset.dart` files containing string co
 
 These files are then imported and used directly in the codebase.
 
-Run `dart run remote_rift_tools:generate_asset pubspec lib/src/assets/pubspec.asset.dart` to generate the necessary assets as code.
-
-> [!tip]
-> Alternatively, use the `connector: generate assets` VS Code task to generate assets. The resulting source will be placed in `packages/api/lib/src/assets`.
-
 ### Dependencies
 
 This section describes selected third-party packages used throughout the application:
@@ -108,6 +103,13 @@ Run `dart compile exe packages/api/lib/src/api/main.dart` to compile the project
 
 > [!tip]
 > Alternatively, use the `connector: build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/build/bundle/bin/remoterift`.
+
+### Generating assets
+
+Run `dart run remote_rift_tools:generate_asset pubspec lib/src/assets/pubspec.asset.dart` to generate the necessary assets as code.
+
+> [!tip]
+> Alternatively, use the `connector: generate assets` VS Code task to generate assets. The resulting source will be placed in `packages/api/lib/src/assets`.
 
 ## Related Projects
 
