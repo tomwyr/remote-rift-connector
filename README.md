@@ -2,6 +2,9 @@
 
 Local service for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
 
+> [!note]
+> While the connector can function independently as a standalone service, a desktop application wrapper is necessary for full mobile application connectivity. See [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) for more details.
+
 ## Overview
 
 Remote Rift Connector is a local background service that exposes an API and a CLI, enabling mobile and desktop apps to interact with the League of Legends client (LCU). It acts as a lightweight adapter that manages LCU connections, translates high-level client actions into LCU API calls and exposes game status to remote clients.
